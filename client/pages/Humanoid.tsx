@@ -246,7 +246,6 @@ export default function Humanoid() {
               overflow: "hidden",
               boxShadow: "0 10px 40px rgba(0, 0, 0, 0.45)"
             }}
-            className="lg:col-span-3"
           >
             <div
               style={{
