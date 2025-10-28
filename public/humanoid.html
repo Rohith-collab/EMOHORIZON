@@ -772,34 +772,53 @@
       }
 
       const ctx = detectionCanvas.getContext('2d');
-      const displaySize = { width: video.videoWidth, height: video.videoHeight };
-      faceapi.matchDimensions(detectionCanvas, displaySize);
 
+      // Run detection periodically; compute display size each run since video dimensions may initialize later
       clearInterval(intervalId);
       intervalId = setInterval(async () => {
-        if (video.readyState !== 4) return;
+        try {
+          if (video.readyState !== 4) {
+            // video not ready yet
+            // console.log('Waiting for video to be ready, readyState=', video.readyState);
+            return;
+          }
 
-        const detections = await faceapi
-          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceExpressions();
+          const displaySize = { width: video.videoWidth || video.clientWidth, height: video.videoHeight || video.clientHeight };
+          if (!displaySize.width || !displaySize.height) {
+            // still no dimensions
+            // console.log('Video dimensions not available yet');
+            return;
+          }
 
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
-        faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
-        faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
+          // ensure canvas matches video size in pixels
+          detectionCanvas.width = displaySize.width;
+          detectionCanvas.height = displaySize.height;
+          faceapi.matchDimensions(detectionCanvas, displaySize);
 
-        if (detections.length > 0) {
-          const emotions = detections[0].expressions;
-          const mainEmotion = Object.keys(emotions).reduce((a, b) =>
-            emotions[a] > emotions[b] ? a : b
-          );
-          const confidence = (emotions[mainEmotion] * 100).toFixed(1);
-          emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
-          // Update global state or trigger reactions here
-          // Example: console.log("Detected emotion:", mainEmotion);
-        } else {
-          emotionLabel.textContent = 'No face detected';
+          const detections = await faceapi
+            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceExpressions();
+
+          const resizedDetections = faceapi.resizeResults(detections, displaySize);
+          ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
+          faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
+          faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
+
+          if (detections.length > 0) {
+            const emotions = detections[0].expressions;
+            const mainEmotion = Object.keys(emotions).reduce((a, b) => (emotions[a] > emotions[b] ? a : b));
+            const confidence = (emotions[mainEmotion] * 100).toFixed(1);
+            emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
+            window.currentEmotion = mainEmotion;
+            // Update global state or trigger reactions here
+            // Example: console.log('Detected emotion:', mainEmotion, 'conf', confidence);
+          } else {
+            emotionLabel.textContent = 'No face detected';
+            window.currentEmotion = null;
+          }
+        } catch (err) {
+          console.error('Error during detection run:', err);
         }
       }, 300);
     }
