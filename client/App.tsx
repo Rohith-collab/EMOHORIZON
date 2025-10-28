@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "./components/Layout";
 import Index from "./pages/Index";
 import Chat from "./pages/Chat";
+import Humanoid from "./pages/Humanoid";
 import Features from "./pages/Features";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
