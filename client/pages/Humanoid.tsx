@@ -119,10 +119,24 @@ export default function Humanoid() {
               </div>
               <div
                 id="did-agent-container"
-                className="flex-1 bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center"
+                className="flex-1 bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center justify-center"
               >
+                <svg
+                  className="w-12 h-12 text-blue-300 mb-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
                 <p className="text-gray-500 text-center text-sm px-4">
-                  D-ID Avatar will load here
+                  To enable the D-ID avatar, add your valid D-ID credentials
+                  to the Humanoid.tsx file
                 </p>
               </div>
             </div>
