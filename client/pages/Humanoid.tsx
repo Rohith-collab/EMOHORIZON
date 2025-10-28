@@ -135,8 +135,8 @@ export default function Humanoid() {
                   />
                 </svg>
                 <p className="text-gray-500 text-center text-sm px-4">
-                  To enable the D-ID avatar, add your valid D-ID credentials
-                  to the Humanoid.tsx file
+                  To enable the D-ID avatar, add your valid D-ID credentials to
+                  the Humanoid.tsx file
                 </p>
               </div>
             </div>
@@ -145,7 +145,9 @@ export default function Humanoid() {
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-3 border-b border-gray-200">
                 <h2 className="font-bold text-gray-800">Emotion Detector</h2>
-                <p className="text-xs text-gray-600">Real-time emotion analysis</p>
+                <p className="text-xs text-gray-600">
+                  Real-time emotion analysis
+                </p>
               </div>
               <div className="p-4">
                 <EmotionDetector onEmotionDetected={handleEmotionDetected} />
@@ -169,7 +171,8 @@ export default function Humanoid() {
               </div>
               {currentEmotion && (
                 <div className="mt-2 text-xs text-purple-600 font-medium">
-                  Your emotion: <span className="font-bold">{currentEmotion}</span>
+                  Your emotion:{" "}
+                  <span className="font-bold">{currentEmotion}</span>
                 </div>
               )}
             </div>

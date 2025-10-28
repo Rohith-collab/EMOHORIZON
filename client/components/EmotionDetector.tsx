@@ -30,7 +30,7 @@ const EmotionDetector: React.FC<EmotionDetectorProps> = ({
       } catch (err) {
         console.error("Failed to load models:", err);
         setError(
-          "Failed to load emotion detection models. Please refresh the page."
+          "Failed to load emotion detection models. Please refresh the page.",
         );
       }
     };
@@ -51,7 +51,7 @@ const EmotionDetector: React.FC<EmotionDetectorProps> = ({
     } catch (err) {
       console.error("Camera access denied:", err);
       setError(
-        "Camera access denied. Please allow camera permissions and try again."
+        "Camera access denied. Please allow camera permissions and try again.",
       );
     }
   };
@@ -74,13 +74,16 @@ const EmotionDetector: React.FC<EmotionDetectorProps> = ({
 
     try {
       const detections = await faceapi
-        .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+        .detectSingleFace(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions(),
+        )
         .withFaceExpressions();
 
       if (detections && detections.expressions) {
         const emotionEntries = Object.entries(detections.expressions);
         const detectedEmotion = emotionEntries.reduce((a, b) =>
-          a[1] > b[1] ? a : b
+          a[1] > b[1] ? a : b,
         )[0];
 
         const formattedEmotion =
@@ -150,7 +153,8 @@ const EmotionDetector: React.FC<EmotionDetectorProps> = ({
             Enable Camera
           </button>
           <p className="text-xs text-gray-500 text-center max-w-xs">
-            Click to start emotion detection. Your video stream is processed locally and not stored.
+            Click to start emotion detection. Your video stream is processed
+            locally and not stored.
           </p>
         </div>
       ) : (
@@ -171,9 +175,7 @@ const EmotionDetector: React.FC<EmotionDetectorProps> = ({
           </div>
 
           <div className="flex flex-col items-center gap-2 bg-white rounded-lg p-4 shadow-md w-full max-w-xs">
-            <p className="text-sm text-gray-600 font-medium">
-              Current Emotion
-            </p>
+            <p className="text-sm text-gray-600 font-medium">Current Emotion</p>
             <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               {emotion}
             </p>

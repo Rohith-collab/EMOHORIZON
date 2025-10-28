@@ -35,7 +35,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
               // Use regular anchor tag for static HTML files
-              if (link.path.endsWith('.html')) {
+              if (link.path.endsWith(".html")) {
                 return (
                   <a
                     key={link.path}
@@ -83,7 +83,7 @@ export function Header() {
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => {
                 // Use regular anchor tag for static HTML files
-                if (link.path.endsWith('.html')) {
+                if (link.path.endsWith(".html")) {
                   return (
                     <a
                       key={link.path}

@@ -31,18 +31,15 @@
       body {
         color: var(--text);
         font-family:
-          -apple-system,
-          BlinkMacSystemFont,
-          'Segoe UI',
-          'Roboto',
-          'Oxygen',
-          'Ubuntu',
-          'Cantarell',
-          'Fira Sans',
-          'Droid Sans',
-          'Helvetica Neue',
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
           sans-serif;
-        background: linear-gradient(135deg, #f0f9ff 0%, #f8f9fa 50%, #fef3c7 100%);
+        background: linear-gradient(
+          135deg,
+          #f0f9ff 0%,
+          #f8f9fa 50%,
+          #fef3c7 100%
+        );
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -134,7 +131,11 @@
         font-weight: 800;
         letter-spacing: 0.02em;
         margin: 0 0 6px 0;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -211,7 +212,11 @@
         padding: 14px 16px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         flex-shrink: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(124, 58, 237, 0.02));
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.5),
+          rgba(124, 58, 237, 0.02)
+        );
       }
 
       .card-title {
@@ -239,7 +244,11 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-        background: linear-gradient(to bottom, rgba(248, 249, 250, 0.5), rgba(240, 249, 255, 0.3));
+        background: linear-gradient(
+          to bottom,
+          rgba(248, 249, 250, 0.5),
+          rgba(240, 249, 255, 0.3)
+        );
       }
 
       .chat-messages::-webkit-scrollbar {
@@ -303,14 +312,22 @@
       }
 
       .message.ai .message-content {
-        background: linear-gradient(135deg, rgba(248, 249, 250, 0.8), rgba(240, 249, 255, 0.6));
+        background: linear-gradient(
+          135deg,
+          rgba(248, 249, 250, 0.8),
+          rgba(240, 249, 255, 0.6)
+        );
         border-radius: 16px 16px 4px 16px;
         border-color: rgba(14, 165, 233, 0.2);
         color: var(--text);
       }
 
       .message.ai .message-content:hover {
-        background: linear-gradient(135deg, rgba(240, 249, 255, 0.9), rgba(224, 242, 254, 0.7));
+        background: linear-gradient(
+          135deg,
+          rgba(240, 249, 255, 0.9),
+          rgba(224, 242, 254, 0.7)
+        );
         border-color: rgba(14, 165, 233, 0.4);
       }
 
@@ -357,7 +374,11 @@
         padding: 16px;
         border-top: 1px solid rgba(0, 0, 0, 0.06);
         flex-shrink: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(248, 249, 250, 0.3));
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.5),
+          rgba(248, 249, 250, 0.3)
+        );
       }
 
       .chat-input {
@@ -631,28 +652,50 @@
               <div class="card-title">Camera Preview</div>
               <div class="card-sub">View your webcam feed</div>
             </div>
-            <div class="badge" id="cameraStatus" aria-hidden="true">Offline</div>
+            <div class="badge" id="cameraStatus" aria-hidden="true">
+              Offline
+            </div>
           </div>
 
-          <div class="card-body" style="align-items: center; justify-content: center;">
-            <div class="camera-container" style="width: 100%; max-width: 100%;">
+          <div
+            class="card-body"
+            style="align-items: center; justify-content: center"
+          >
+            <div class="camera-container" style="width: 100%; max-width: 100%">
               <video
                 id="cameraPreview"
                 playsinline
                 muted
-                style="display: none; width: 100%; border-radius: 12px;"
+                style="display: none; width: 100%; border-radius: 12px"
               ></video>
               <div
                 id="cameraPlaceholder"
-                style="width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(240, 249, 255, 0.4), rgba(248, 249, 250, 0.4)); border-radius: 12px;"
+                style="
+                  width: 100%;
+                  aspect-ratio: 4/3;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: linear-gradient(
+                    135deg,
+                    rgba(240, 249, 255, 0.4),
+                    rgba(248, 249, 250, 0.4)
+                  );
+                  border-radius: 12px;
+                "
               >
-                <div style="text-align: center;">
+                <div style="text-align: center">
                   <svg
                     class="w-12 h-12 mx-auto text-gray-400 mb-3"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    style="width: 48px; height: 48px; margin: 0 auto 12px; color: #d1d5db;"
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      margin: 0 auto 12px;
+                      color: #d1d5db;
+                    "
                   >
                     <path
                       stroke-linecap="round"
@@ -661,7 +704,9 @@
                       d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                     ></path>
                   </svg>
-                  <p style="color: #6b7280; font-size: 14px;">Click "Start Camera" to enable preview</p>
+                  <p style="color: #6b7280; font-size: 14px">
+                    Click "Start Camera" to enable preview
+                  </p>
                 </div>
               </div>
             </div>
