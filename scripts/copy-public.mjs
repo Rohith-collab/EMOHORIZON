@@ -1,5 +1,5 @@
-import { mkdir, copyFile, stat, readdir } from 'fs/promises';
-import path from 'path';
+import { mkdir, copyFile, stat, readdir } from "fs/promises";
+import path from "path";
 
 async function copyDir(src, dest) {
   await mkdir(dest, { recursive: true });
@@ -17,8 +17,8 @@ async function copyDir(src, dest) {
 
 async function main() {
   try {
-    const src = path.resolve(process.cwd(), 'public');
-    const dest = path.resolve(process.cwd(), 'dist/spa');
+    const src = path.resolve(process.cwd(), "public");
+    const dest = path.resolve(process.cwd(), "dist/spa");
     // Only attempt copy if source exists
     try {
       const s = await stat(src);
@@ -29,9 +29,9 @@ async function main() {
     }
 
     await copyDir(src, dest);
-    console.log('Copied public/ to dist/spa/');
+    console.log("Copied public/ to dist/spa/");
   } catch (err) {
-    console.error('Failed to copy public folder:', err);
+    console.error("Failed to copy public folder:", err);
     process.exitCode = 1;
   }
 }

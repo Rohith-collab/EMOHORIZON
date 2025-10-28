@@ -415,12 +415,12 @@
         right: 20px;
         width: 220px;
         height: 160px;
-        background: rgba(0,0,0,0.45);
-        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 12px;
         overflow: hidden;
         z-index: 9999;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -441,12 +441,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.45),
+          rgba(0, 0, 0, 0.25)
+        );
       }
 
       .camera-overlay button {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         padding: 8px 10px;
         color: #fff;
         border-radius: 8px;
@@ -457,9 +461,9 @@
         position: absolute;
         top: 6px;
         right: 6px;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         color: #fff;
-        border: 1px solid rgba(255,255,255,0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         width: 28px;
         height: 28px;
         border-radius: 50%;
@@ -469,23 +473,24 @@
         cursor: pointer;
       }
 
-      .camera-hidden { display: none; }
+      .camera-hidden {
+        display: none;
+      }
 
       /* Emotion label */
       .camera-emotion {
         position: absolute;
         left: 8px;
         bottom: 8px;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0, 0, 0, 0.6);
         color: #fff;
         padding: 6px 8px;
         border-radius: 8px;
         font-size: 12px;
-        border: 1px solid rgba(255,255,255,0.06);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(4px);
         pointer-events: none;
       }
-
     </style>
   </head>
   <body>
@@ -505,7 +510,13 @@
         <button id="startCameraBtn" type="button">Start Camera</button>
       </div>
       <div id="emotionLabel" class="camera-emotion">No face detected</div>
-      <button id="closeCameraBtn" class="camera-close" aria-label="Close camera">✕</button>
+      <button
+        id="closeCameraBtn"
+        class="camera-close"
+        aria-label="Close camera"
+      >
+        ✕
+      </button>
     </div>
 
     <main>
@@ -594,13 +605,16 @@
       window.__didAgentLoadFailed = false;
 
       // Catch unhandled promise rejections and network 'Failed to fetch' originating from D-ID
-      window.addEventListener('unhandledrejection', (ev) => {
+      window.addEventListener("unhandledrejection", (ev) => {
         try {
           const reason = ev.reason;
           const msg = (reason && reason.message) || String(reason);
-          if (msg && msg.includes('Failed to fetch')) {
+          if (msg && msg.includes("Failed to fetch")) {
             window.__didAgentLoadFailed = true;
-            console.warn('D-ID agent network request failed — avatar will be unavailable.', reason);
+            console.warn(
+              "D-ID agent network request failed — avatar will be unavailable.",
+              reason,
+            );
             ev.preventDefault();
           }
         } catch (e) {
@@ -608,12 +622,14 @@
         }
       });
 
-      window.addEventListener('error', (ev) => {
+      window.addEventListener("error", (ev) => {
         try {
           const msg = ev && ev.message;
-          if (msg && msg.includes('Failed to fetch')) {
+          if (msg && msg.includes("Failed to fetch")) {
             window.__didAgentLoadFailed = true;
-            console.warn('D-ID agent network request failed — avatar will be unavailable.');
+            console.warn(
+              "D-ID agent network request failed — avatar will be unavailable.",
+            );
             ev.preventDefault();
           }
         } catch (e) {}
@@ -621,28 +637,34 @@
 
       // Dynamically load D-ID agent script so we can handle load errors
       (function loadDidAgent() {
-        const s = document.createElement('script');
-        s.type = 'module';
-        s.src = 'https://agent.d-id.com/v2/index.js';
-        s.dataset.mode = 'fabio';
-        s.dataset.clientKey = 'Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS';
-        s.dataset.agentId = 'v2_agt__m8h5T0f';
-        s.dataset.name = 'did-agent';
-        s.dataset.monitor = 'true';
-        s.dataset.orientation = 'horizontal';
-        s.dataset.position = 'right';
+        const s = document.createElement("script");
+        s.type = "module";
+        s.src = "https://agent.d-id.com/v2/index.js";
+        s.dataset.mode = "fabio";
+        s.dataset.clientKey =
+          "Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS";
+        s.dataset.agentId = "v2_agt__m8h5T0f";
+        s.dataset.name = "did-agent";
+        s.dataset.monitor = "true";
+        s.dataset.orientation = "horizontal";
+        s.dataset.position = "right";
 
         s.onload = function () {
           // If D-ID script loaded but later failed internally, the unhandledrejection handler will set the flag
           if (window.__didAgentLoadFailed) {
             // Optionally show a user-visible note
-            console.warn('D-ID agent loaded but failed to initialize correctly.');
+            console.warn(
+              "D-ID agent loaded but failed to initialize correctly.",
+            );
           }
         };
 
         s.onerror = function (err) {
           window.__didAgentLoadFailed = true;
-          console.warn('Failed to load D-ID agent script — avatar will be unavailable.', err);
+          console.warn(
+            "Failed to load D-ID agent script — avatar will be unavailable.",
+            err,
+          );
         };
 
         document.body.appendChild(s);
@@ -652,23 +674,27 @@
     <!-- Camera Preview Logic -->
     <script>
       (function () {
-        const startBtn = document.getElementById('startCameraBtn');
-        const closeBtn = document.getElementById('closeCameraBtn');
-        const overlay = document.getElementById('cameraOverlay');
-        const preview = document.getElementById('cameraPreview');
-        const video = document.getElementById('cameraVideo');
+        const startBtn = document.getElementById("startCameraBtn");
+        const closeBtn = document.getElementById("closeCameraBtn");
+        const overlay = document.getElementById("cameraOverlay");
+        const preview = document.getElementById("cameraPreview");
+        const video = document.getElementById("cameraVideo");
         let stream = null;
 
         async function startCamera() {
           try {
             if (stream) return;
-            stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: { width: 640, height: 480 },
+              audio: false,
+            });
             video.srcObject = stream;
             await video.play();
-            overlay.style.display = 'none';
+            overlay.style.display = "none";
           } catch (err) {
-            console.warn('Camera access denied or unavailable:', err);
-            overlay.innerHTML = '<div style="padding:8px;color:#fff;text-align:center;">Camera unavailable</div>';
+            console.warn("Camera access denied or unavailable:", err);
+            overlay.innerHTML =
+              '<div style="padding:8px;color:#fff;text-align:center;">Camera unavailable</div>';
           }
         }
 
@@ -678,185 +704,216 @@
             stream = null;
           }
           video.srcObject = null;
-          overlay.style.display = 'flex';
+          overlay.style.display = "flex";
         }
 
-        startBtn?.addEventListener('click', (e) => {
+        startBtn?.addEventListener("click", (e) => {
           e.preventDefault();
           startCamera();
         });
 
-        closeBtn?.addEventListener('click', (e) => {
+        closeBtn?.addEventListener("click", (e) => {
           e.preventDefault();
           stopCamera();
           // hide preview after stopping
-          preview.classList.add('camera-hidden');
+          preview.classList.add("camera-hidden");
         });
 
         // If user navigates away or unloads, ensure camera is stopped
-        window.addEventListener('pagehide', stopCamera);
-        window.addEventListener('beforeunload', stopCamera);
+        window.addEventListener("pagehide", stopCamera);
+        window.addEventListener("beforeunload", stopCamera);
 
         // Accessibility: allow pressing video to open camera if overlay present
-        preview?.addEventListener('click', (e) => {
+        preview?.addEventListener("click", (e) => {
           if (e.target === preview || e.target === video) {
             // if overlay visible, start, otherwise ignore
-            if (overlay && overlay.style.display !== 'none') startCamera();
+            if (overlay && overlay.style.display !== "none") startCamera();
           }
         });
       })();
     </script>
 
     <!-- Face Detection & Emotion Analysis -->
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"
+    ></script>
 
-<script>
-  (function () {
-    const video = document.getElementById('cameraVideo');
-    const emotionLabel = document.getElementById('emotionLabel');
-    const container = document.getElementById('cameraPreview');
+    <script>
+      (function () {
+        const video = document.getElementById("cameraVideo");
+        const emotionLabel = document.getElementById("emotionLabel");
+        const container = document.getElementById("cameraPreview");
 
-    // Wait for faceapi
-    const waitForFaceApi = async (timeout = 15000) => {
-      const start = Date.now();
-      while (typeof window.faceapi === 'undefined') {
-        if (Date.now() - start > timeout)
-          throw new Error('face-api.js failed to load within timeout');
-        await new Promise((r) => setTimeout(r, 100));
-      }
-    };
+        // Wait for faceapi
+        const waitForFaceApi = async (timeout = 15000) => {
+          const start = Date.now();
+          while (typeof window.faceapi === "undefined") {
+            if (Date.now() - start > timeout)
+              throw new Error("face-api.js failed to load within timeout");
+            await new Promise((r) => setTimeout(r, 100));
+          }
+        };
 
-    const loadModels = async () => {
-      await waitForFaceApi();
-      try {
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-          faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-          faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-        ]);
-        console.log('✅ face-api models loaded from /models');
-      } catch (err) {
-        console.warn('⚠️ Loading from /models failed, using CDN fallback.');
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri(
-            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-          ),
-          faceapi.nets.faceExpressionNet.loadFromUri(
-            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-          ),
-          faceapi.nets.faceLandmark68Net.loadFromUri(
-            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-          ),
-        ]);
-        console.log('✅ face-api models loaded from CDN.');
-      }
-    };
+        const loadModels = async () => {
+          await waitForFaceApi();
+          try {
+            await Promise.all([
+              faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+              faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+              faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+            ]);
+            console.log("✅ face-api models loaded from /models");
+          } catch (err) {
+            console.warn("⚠️ Loading from /models failed, using CDN fallback.");
+            await Promise.all([
+              faceapi.nets.tinyFaceDetector.loadFromUri(
+                "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/",
+              ),
+              faceapi.nets.faceExpressionNet.loadFromUri(
+                "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/",
+              ),
+              faceapi.nets.faceLandmark68Net.loadFromUri(
+                "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/",
+              ),
+            ]);
+            console.log("✅ face-api models loaded from CDN.");
+          }
+        };
 
-    const modelsReady = loadModels();
-    let detectionCanvas = null;
-    let intervalId = null;
+        const modelsReady = loadModels();
+        let detectionCanvas = null;
+        let intervalId = null;
 
-    async function startEmotionDetection() {
-      await modelsReady;
+        async function startEmotionDetection() {
+          await modelsReady;
 
-      // Create overlay canvas if not present
-      if (!detectionCanvas) {
-        detectionCanvas = faceapi.createCanvasFromMedia(video);
-        detectionCanvas.style.position = 'absolute';
-        detectionCanvas.style.top = 0;
-        detectionCanvas.style.left = 0;
-        detectionCanvas.style.width = '100%';
-        detectionCanvas.style.height = '100%';
-        detectionCanvas.style.pointerEvents = 'none';
-        container.appendChild(detectionCanvas);
-      }
-
-      const ctx = detectionCanvas.getContext('2d');
-
-      // Run detection periodically; compute display size each run since video dimensions may initialize later
-      clearInterval(intervalId);
-      intervalId = setInterval(async () => {
-        try {
-          if (video.readyState !== 4) {
-            // video not ready yet
-            // console.log('Waiting for video to be ready, readyState=', video.readyState);
-            return;
+          // Create overlay canvas if not present
+          if (!detectionCanvas) {
+            detectionCanvas = faceapi.createCanvasFromMedia(video);
+            detectionCanvas.style.position = "absolute";
+            detectionCanvas.style.top = 0;
+            detectionCanvas.style.left = 0;
+            detectionCanvas.style.width = "100%";
+            detectionCanvas.style.height = "100%";
+            detectionCanvas.style.pointerEvents = "none";
+            container.appendChild(detectionCanvas);
           }
 
-          const displaySize = { width: video.videoWidth || video.clientWidth, height: video.videoHeight || video.clientHeight };
-          if (!displaySize.width || !displaySize.height) {
-            // still no dimensions
-            // console.log('Video dimensions not available yet');
-            return;
-          }
+          const ctx = detectionCanvas.getContext("2d");
 
-          // ensure canvas matches video size in pixels
-          detectionCanvas.width = displaySize.width;
-          detectionCanvas.height = displaySize.height;
-          faceapi.matchDimensions(detectionCanvas, displaySize);
+          // Run detection periodically; compute display size each run since video dimensions may initialize later
+          clearInterval(intervalId);
+          intervalId = setInterval(async () => {
+            try {
+              if (video.readyState !== 4) {
+                // video not ready yet
+                // console.log('Waiting for video to be ready, readyState=', video.readyState);
+                return;
+              }
 
-          const detections = await faceapi
-            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-            .withFaceLandmarks()
-            .withFaceExpressions();
+              const displaySize = {
+                width: video.videoWidth || video.clientWidth,
+                height: video.videoHeight || video.clientHeight,
+              };
+              if (!displaySize.width || !displaySize.height) {
+                // still no dimensions
+                // console.log('Video dimensions not available yet');
+                return;
+              }
 
-          const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
-          faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
-          faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
+              // ensure canvas matches video size in pixels
+              detectionCanvas.width = displaySize.width;
+              detectionCanvas.height = displaySize.height;
+              faceapi.matchDimensions(detectionCanvas, displaySize);
 
-          if (detections.length > 0) {
-            const emotions = detections[0].expressions;
-            const mainEmotion = Object.keys(emotions).reduce((a, b) => (emotions[a] > emotions[b] ? a : b));
-            const confidence = (emotions[mainEmotion] * 100).toFixed(1);
-            emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
-            window.currentEmotion = mainEmotion;
-            // Update global state or trigger reactions here
-            // Example: console.log('Detected emotion:', mainEmotion, 'conf', confidence);
-          } else {
-            emotionLabel.textContent = 'No face detected';
-            window.currentEmotion = null;
-          }
-        } catch (err) {
-          console.error('Error during detection run:', err);
+              const detections = await faceapi
+                .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks()
+                .withFaceExpressions();
+
+              const resizedDetections = faceapi.resizeResults(
+                detections,
+                displaySize,
+              );
+              ctx.clearRect(
+                0,
+                0,
+                detectionCanvas.width,
+                detectionCanvas.height,
+              );
+              faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
+              faceapi.draw.drawFaceExpressions(
+                detectionCanvas,
+                resizedDetections,
+              );
+
+              if (detections.length > 0) {
+                const emotions = detections[0].expressions;
+                const mainEmotion = Object.keys(emotions).reduce((a, b) =>
+                  emotions[a] > emotions[b] ? a : b,
+                );
+                const confidence = (emotions[mainEmotion] * 100).toFixed(1);
+                emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
+                window.currentEmotion = mainEmotion;
+                // Update global state or trigger reactions here
+                // Example: console.log('Detected emotion:', mainEmotion, 'conf', confidence);
+              } else {
+                emotionLabel.textContent = "No face detected";
+                window.currentEmotion = null;
+              }
+            } catch (err) {
+              console.error("Error during detection run:", err);
+            }
+          }, 300);
         }
-      }, 300);
-    }
 
-    // When the user clicks "Start Camera"
-    document.getElementById('startCameraBtn').addEventListener('click', async () => {
-      try {
-        // Prefer existing camera starter if present (from other script)
-        if (typeof window.__startCamera === 'function') {
-          await window.__startCamera();
-        } else {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-          video.srcObject = stream;
-          await video.play();
-        }
+        // When the user clicks "Start Camera"
+        document
+          .getElementById("startCameraBtn")
+          .addEventListener("click", async () => {
+            try {
+              // Prefer existing camera starter if present (from other script)
+              if (typeof window.__startCamera === "function") {
+                await window.__startCamera();
+              } else {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                  video: true,
+                  audio: false,
+                });
+                video.srcObject = stream;
+                await video.play();
+              }
 
-        console.log('Camera started, video size:', video.videoWidth, video.videoHeight);
-        const overlayEl = document.getElementById('cameraOverlay');
-        if (overlayEl) overlayEl.style.display = 'none';
-        container.classList.remove('camera-hidden');
-        startEmotionDetection();
-      } catch (err) {
-        console.error('Camera error:', err);
-        if (emotionLabel) emotionLabel.textContent = 'Camera access denied';
-      }
-    });
+              console.log(
+                "Camera started, video size:",
+                video.videoWidth,
+                video.videoHeight,
+              );
+              const overlayEl = document.getElementById("cameraOverlay");
+              if (overlayEl) overlayEl.style.display = "none";
+              container.classList.remove("camera-hidden");
+              startEmotionDetection();
+            } catch (err) {
+              console.error("Camera error:", err);
+              if (emotionLabel)
+                emotionLabel.textContent = "Camera access denied";
+            }
+          });
 
-    // Stop detection and camera
-    document.getElementById('closeCameraBtn').addEventListener('click', () => {
-      clearInterval(intervalId);
-      if (video.srcObject) {
-        video.srcObject.getTracks().forEach((t) => t.stop());
-      }
-      video.srcObject = null;
-      emotionLabel.textContent = 'Camera stopped';
-    });
-  })();
-</script>
+        // Stop detection and camera
+        document
+          .getElementById("closeCameraBtn")
+          .addEventListener("click", () => {
+            clearInterval(intervalId);
+            if (video.srcObject) {
+              video.srcObject.getTracks().forEach((t) => t.stop());
+            }
+            video.srcObject = null;
+            emotionLabel.textContent = "Camera stopped";
+          });
+      })();
+    </script>
 
     <!-- Chat Logic -->
     <script>
@@ -953,7 +1010,12 @@
             } catch (_) {
               // ignore
             }
-            const msg = (errBody && (errBody.error || errBody.message || JSON.stringify(errBody))) || 'Failed to get response from server';
+            const msg =
+              (errBody &&
+                (errBody.error ||
+                  errBody.message ||
+                  JSON.stringify(errBody))) ||
+              "Failed to get response from server";
             throw new Error(msg);
           }
 
