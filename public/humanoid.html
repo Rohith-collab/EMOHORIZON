@@ -633,6 +633,64 @@
       })();
     </script>
 
+    <!-- Camera Preview Logic -->
+    <script>
+      (function () {
+        const startBtn = document.getElementById('startCameraBtn');
+        const closeBtn = document.getElementById('closeCameraBtn');
+        const overlay = document.getElementById('cameraOverlay');
+        const preview = document.getElementById('cameraPreview');
+        const video = document.getElementById('cameraVideo');
+        let stream = null;
+
+        async function startCamera() {
+          try {
+            if (stream) return;
+            stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+            video.srcObject = stream;
+            await video.play();
+            overlay.style.display = 'none';
+          } catch (err) {
+            console.warn('Camera access denied or unavailable:', err);
+            overlay.innerHTML = '<div style="padding:8px;color:#fff;text-align:center;">Camera unavailable</div>';
+          }
+        }
+
+        function stopCamera() {
+          if (stream) {
+            stream.getTracks().forEach((t) => t.stop());
+            stream = null;
+          }
+          video.srcObject = null;
+          overlay.style.display = 'flex';
+        }
+
+        startBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          startCamera();
+        });
+
+        closeBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          stopCamera();
+          // hide preview after stopping
+          preview.classList.add('camera-hidden');
+        });
+
+        // If user navigates away or unloads, ensure camera is stopped
+        window.addEventListener('pagehide', stopCamera);
+        window.addEventListener('beforeunload', stopCamera);
+
+        // Accessibility: allow pressing video to open camera if overlay present
+        preview?.addEventListener('click', (e) => {
+          if (e.target === preview || e.target === video) {
+            // if overlay visible, start, otherwise ignore
+            if (overlay && overlay.style.display !== 'none') startCamera();
+          }
+        });
+      })();
+    </script>
+
     <!-- Chat Logic -->
     <script>
       const chatMessages = document.getElementById("chatMessages");
