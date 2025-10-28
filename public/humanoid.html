@@ -643,7 +643,14 @@
           });
 
           if (!response.ok) {
-            throw new Error("Failed to get response");
+            let errBody = null;
+            try {
+              errBody = await response.json();
+            } catch (_) {
+              // ignore
+            }
+            const msg = (errBody && (errBody.error || errBody.message || JSON.stringify(errBody))) || 'Failed to get response from server';
+            throw new Error(msg);
           }
 
           const data = await response.json();
