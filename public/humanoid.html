@@ -895,6 +895,16 @@
           }, 300);
         }
 
+        // Open camera widget launcher
+        const openBtn = document.getElementById('openCameraBtn');
+        if (openBtn) {
+          openBtn.addEventListener('click', () => {
+            container.style.display = 'block';
+            const startBtn = document.getElementById('startCameraBtn');
+            if (startBtn) startBtn.focus();
+          });
+        }
+
         // When the user clicks "Start Camera"
         document.getElementById('startCameraBtn').addEventListener('click', async () => {
           try {
