@@ -400,6 +400,77 @@
         font-size: 12px;
         text-align: center;
       }
+      /* Footer */
+      .footer {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      /* Camera preview (top-right) */
+      .camera-preview {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 220px;
+        height: 160px;
+        background: rgba(0,0,0,0.45);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px;
+        overflow: hidden;
+        z-index: 9999;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+      }
+
+      .camera-preview video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scaleX(-1); /* mirror for a natural preview */
+        display: block;
+      }
+
+      .camera-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
+      }
+
+      .camera-overlay button {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 8px 10px;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .camera-close {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.08);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .camera-hidden { display: none; }
+
     </style>
   </head>
   <body>
