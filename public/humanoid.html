@@ -449,7 +449,7 @@
       }
 
       /* Camera Preview */
-      .camera-section {
+      .camera-section { /* kept for layout fallback */
         margin-top: 24px;
       }
 
@@ -557,6 +557,105 @@
         text-align: center;
         font-weight: 500;
       }
+
+      /* Mobile adjustments */
+      @media (max-width: 600px) {
+        :root {
+          --card-border: rgba(0,0,0,0.06);
+        }
+
+        header .nav {
+          padding: 10px 12px;
+        }
+
+        .page-title {
+          font-size: 20px;
+        }
+
+        .page-subtitle {
+          font-size: 12px;
+        }
+
+        main {
+          padding: 16px 12px;
+        }
+
+        .card {
+          border-radius: 12px;
+        }
+
+        .card-header {
+          padding: 12px;
+        }
+
+        .chat-messages {
+          padding: 12px;
+          gap: 12px;
+        }
+
+        .message-content {
+          max-width: 100%;
+          font-size: 15px;
+          padding: 10px 12px;
+        }
+
+        .message-avatar {
+          width: 36px;
+          height: 36px;
+          font-size: 13px;
+        }
+
+        .chat-form {
+          padding: 10px;
+          gap: 8px;
+        }
+
+        .chat-input {
+          padding: 10px;
+          font-size: 15px;
+        }
+
+        .send-btn {
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        /* Make chat input sticky at bottom on mobile */
+        .card[aria-label="Chat Interface"] {
+          position: relative;
+        }
+
+        .card[aria-label="Chat Interface"] .chat-form {
+          position: sticky;
+          bottom: 0;
+          background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95));
+          z-index: 30;
+        }
+
+        /* Avatar area height for mobile */
+        #did-agent-container {
+          min-height: 220px;
+        }
+
+        /* Camera preview: move to bottom-right and reduce size */
+        #cameraPreview {
+          top: auto !important;
+          bottom: 20px !important;
+          right: 12px !important;
+          left: auto !important;
+          width: 240px !important;
+          max-width: 46vw !important;
+        }
+
+        /* Ensure draggable handle is large enough on touch */
+        #cameraPreview .card > div {
+          padding: 10px;
+        }
+
+        /* Reduce header elements spacing */
+        .nav { padding: 10px; }
+      }
+
     </style>
   </head>
   <body>
@@ -644,184 +743,11 @@
         </section>
       </div>
 
-      <!-- Camera Preview Section -->
-      <section class="camera-section">
-        <div class="card" aria-label="Camera Preview">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Camera Preview</div>
-              <div class="card-sub">View your webcam feed</div>
-            </div>
-            <div class="badge" id="cameraStatus" aria-hidden="true">
-              Offline
-            </div>
-          </div>
-
-          <div
-            class="card-body"
-            style="align-items: center; justify-content: center"
-          >
-            <div class="camera-container" style="width: 100%; max-width: 100%">
-              <video
-                id="cameraPreview"
-                playsinline
-                muted
-                style="display: none; width: 100%; border-radius: 12px"
-              ></video>
-              <div
-                id="cameraPlaceholder"
-                style="
-                  width: 100%;
-                  aspect-ratio: 4/3;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  background: linear-gradient(
-                    135deg,
-                    rgba(240, 249, 255, 0.4),
-                    rgba(248, 249, 250, 0.4)
-                  );
-                  border-radius: 12px;
-                "
-              >
-                <div style="text-align: center">
-                  <svg
-                    class="w-12 h-12 mx-auto text-gray-400 mb-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    style="
-                      width: 48px;
-                      height: 48px;
-                      margin: 0 auto 12px;
-                      color: #d1d5db;
-                    "
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                  <p style="color: #6b7280; font-size: 14px">
-                    Click "Start Camera" to enable preview
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="camera-controls">
-              <button
-                type="button"
-                class="camera-btn start"
-                id="startCameraBtn"
-                onclick="startCamera()"
-              >
-                ▶ Start Camera
-              </button>
-              <button
-                type="button"
-                class="camera-btn stop"
-                id="stopCameraBtn"
-                onclick="stopCamera()"
-                disabled
-              >
-                ⏹ Stop Camera
-              </button>
-            </div>
-            <div class="camera-status" id="cameraStatusText">
-              Camera is offline
-            </div>
-          </div>
-        </div>
-      </section>
-
       <p class="footer">
         If avatar doesn't load, refresh the page or check your network
         connection.
       </p>
     </main>
-
-    <!-- Camera Logic -->
-    <script>
-      let cameraStream = null;
-
-      async function startCamera() {
-        try {
-          const video = document.getElementById("cameraPreview");
-          const placeholder = document.getElementById("cameraPlaceholder");
-          const startBtn = document.getElementById("startCameraBtn");
-          const stopBtn = document.getElementById("stopCameraBtn");
-          const statusBadge = document.getElementById("cameraStatus");
-          const statusText = document.getElementById("cameraStatusText");
-
-          // Request camera access
-          cameraStream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: { ideal: 640 },
-              height: { ideal: 480 },
-              facingMode: "user",
-            },
-            audio: false,
-          });
-
-          // Set video source
-          video.srcObject = cameraStream;
-
-          // Show video, hide placeholder
-          video.style.display = "block";
-          placeholder.style.display = "none";
-
-          // Update button states
-          startBtn.disabled = true;
-          stopBtn.disabled = false;
-
-          // Update status
-          statusBadge.textContent = "Active";
-          statusBadge.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
-          statusBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-          statusBadge.style.color = "#10b981";
-          statusText.textContent = "Camera is active";
-        } catch (error) {
-          console.error("Error accessing camera:", error);
-          const statusText = document.getElementById("cameraStatusText");
-          statusText.textContent =
-            "Camera access denied. Please check permissions.";
-          statusText.style.color = "#dc2626";
-        }
-      }
-
-      function stopCamera() {
-        const video = document.getElementById("cameraPreview");
-        const placeholder = document.getElementById("cameraPlaceholder");
-        const startBtn = document.getElementById("startCameraBtn");
-        const stopBtn = document.getElementById("stopCameraBtn");
-        const statusBadge = document.getElementById("cameraStatus");
-        const statusText = document.getElementById("cameraStatusText");
-
-        if (cameraStream) {
-          // Stop all tracks
-          cameraStream.getTracks().forEach((track) => track.stop());
-          cameraStream = null;
-        }
-
-        // Hide video, show placeholder
-        video.style.display = "none";
-        placeholder.style.display = "flex";
-
-        // Update button states
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-
-        // Update status
-        statusBadge.textContent = "Offline";
-        statusBadge.style.backgroundColor = "rgba(229, 231, 235, 0.5)";
-        statusBadge.style.borderColor = "rgba(0, 0, 0, 0.08)";
-        statusBadge.style.color = "var(--text-light)";
-        statusText.textContent = "Camera is offline";
-      }
-    </script>
 
     <!-- Chat Logic -->
     <script>
@@ -934,6 +860,255 @@
       });
 
       messageInput.focus();
+    </script>
+
+    <script type="module"
+      src="https://agent.d-id.com/v2/index.js"
+      data-mode="fabio"
+      data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
+      data-name="did-agent"
+      data-monitor="true"
+      data-target-id="did-agent-container">
+  </script>
+    </script>
+    <!-- Camera detection launcher (hidden when preview is fixed) -->
+    <button id="openCameraBtn" aria-label="Open Camera" title="Open Camera" style="display:none; position:fixed; bottom:20px; right:20px; width:56px; height:56px; border-radius:999px; z-index:80; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; display:flex; align-items:center; justify-content:center;">📷</button>
+
+    <!-- Camera detection widget (fixed top-right) -->
+    <div id="cameraPreview" style="display:block; position:fixed; top:20px; right:20px; width:320px; max-width:90vw; z-index:70;">
+      <div class="card" style="padding:12px; border-radius:12px; background: var(--card); box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:700;">Camera</div>
+          <div>
+            <button id="closeCameraBtn" class="camera-btn stop" style="min-width:40px; padding:6px 8px;">✕</button>
+          </div>
+        </div>
+
+        <video id="cameraVideo" autoplay muted playsinline style="width:100%; height:auto; border-radius:8px; background:#000; margin-top:10px; display:block;"></video>
+
+        <div id="cameraOverlay" style="text-align:center; margin-top:8px;">
+          <div id="emotionLabel" style="font-size:13px; color:var(--text-light);">No face detected</div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button id="startCameraBtn" class="camera-btn start" type="button" style="flex:1;">▶ Start Camera</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- face-api.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
+    <script>
+      (function () {
+        const video = document.getElementById('cameraVideo');
+        const emotionLabel = document.getElementById('emotionLabel');
+        const container = document.getElementById('cameraPreview');
+
+        // Wait for faceapi
+        const waitForFaceApi = async (timeout = 15000) => {
+          const start = Date.now();
+          while (typeof window.faceapi === 'undefined') {
+            if (Date.now() - start > timeout)
+              throw new Error('face-api.js failed to load within timeout');
+            await new Promise((r) => setTimeout(r, 100));
+          }
+        };
+
+        const loadModels = async () => {
+          await waitForFaceApi();
+          try {
+            await Promise.all([
+              faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+              faceapi.nets.faceExpressionNet.loadFromUri('/models'),
+              faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+            ]);
+            console.log('✅ face-api models loaded from /models');
+          } catch (err) {
+            console.warn('⚠️ Loading from /models failed, using CDN fallback.');
+            await Promise.all([
+              faceapi.nets.tinyFaceDetector.loadFromUri(
+                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+              ),
+              faceapi.nets.faceExpressionNet.loadFromUri(
+                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+              ),
+              faceapi.nets.faceLandmark68Net.loadFromUri(
+                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+              ),
+            ]);
+            console.log('✅ face-api models loaded from CDN.');
+          }
+        };
+
+        const modelsReady = loadModels();
+        let detectionCanvas = null;
+        let intervalId = null;
+
+        async function startEmotionDetection() {
+          await modelsReady;
+
+          // Create overlay canvas if not present
+          if (!detectionCanvas) {
+            detectionCanvas = faceapi.createCanvasFromMedia(video);
+            detectionCanvas.style.position = 'absolute';
+            detectionCanvas.style.top = 0;
+            detectionCanvas.style.left = 0;
+            detectionCanvas.style.width = '100%';
+            detectionCanvas.style.height = '100%';
+            detectionCanvas.style.pointerEvents = 'none';
+            container.appendChild(detectionCanvas);
+          }
+
+          const ctx = detectionCanvas.getContext('2d');
+          const displaySize = { width: video.videoWidth, height: video.videoHeight };
+          faceapi.matchDimensions(detectionCanvas, displaySize);
+
+          clearInterval(intervalId);
+          intervalId = setInterval(async () => {
+            if (video.readyState !== 4) return;
+
+            const detections = await faceapi
+              .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+              .withFaceLandmarks()
+              .withFaceExpressions();
+
+            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+            ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
+            faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
+            faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
+
+            if (detections.length > 0) {
+              const emotions = detections[0].expressions;
+              const mainEmotion = Object.keys(emotions).reduce((a, b) =>
+                emotions[a] > emotions[b] ? a : b
+              );
+              const confidence = (emotions[mainEmotion] * 100).toFixed(1);
+              emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
+            } else {
+              emotionLabel.textContent = 'No face detected';
+            }
+          }, 300);
+        }
+
+        // When the user clicks "Start Camera"
+        const startBtn = document.getElementById('startCameraBtn');
+        if (startBtn) {
+          startBtn.addEventListener('click', async () => {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false,
+              });
+              video.srcObject = stream;
+              await video.play();
+              const overlay = document.getElementById('cameraOverlay');
+              if (overlay) overlay.style.display = 'none';
+              container.classList.remove('camera-hidden');
+              container.style.display = 'block';
+              startEmotionDetection();
+            } catch (err) {
+              console.error('Camera error:', err);
+              emotionLabel.textContent = 'Camera access denied';
+            }
+          });
+        }
+
+        // Stop detection and camera
+        const closeBtn = document.getElementById('closeCameraBtn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            clearInterval(intervalId);
+            if (video.srcObject) {
+              video.srcObject.getTracks().forEach((t) => t.stop());
+            }
+            video.srcObject = null;
+            emotionLabel.textContent = 'Camera stopped';
+            container.style.display = 'none';
+          });
+        }
+      })();
+    </script>
+    <script>
+      // Draggable cameraPreview
+      (function () {
+        const container = document.getElementById('cameraPreview');
+        if (!container) return;
+        const handle = container.querySelector('.card > div');
+        container.style.touchAction = 'none';
+        if (handle) handle.style.cursor = 'grab';
+
+        let dragging = false;
+        let pointerId = null;
+        let startX = 0;
+        let startY = 0;
+        let startLeft = 0;
+        let startTop = 0;
+
+        function onPointerDown(e) {
+          if (e.button && e.button !== 0) return; // only left click
+          dragging = true;
+          pointerId = e.pointerId;
+          (e.target || e.srcElement).setPointerCapture && (e.target || e.srcElement).setPointerCapture(pointerId);
+
+          // compute current left/top
+          const rect = container.getBoundingClientRect();
+          // if right is used, convert to left
+          if (container.style.right && !container.style.left) {
+            container.style.left = rect.left + 'px';
+            container.style.right = 'auto';
+          }
+
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = rect.left;
+          startTop = rect.top;
+
+          if (handle) handle.style.cursor = 'grabbing';
+          container.style.transition = 'none';
+          e.preventDefault();
+        }
+
+        function onPointerMove(e) {
+          if (!dragging || e.pointerId !== pointerId) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          let newLeft = startLeft + dx;
+          let newTop = startTop + dy;
+
+          // constrain to viewport with 8px margin
+          const margin = 8;
+          const maxLeft = window.innerWidth - container.offsetWidth - margin;
+          const maxTop = window.innerHeight - container.offsetHeight - margin;
+          newLeft = Math.max(margin, Math.min(maxLeft, newLeft));
+          newTop = Math.max(margin, Math.min(maxTop, newTop));
+
+          container.style.left = newLeft + 'px';
+          container.style.top = newTop + 'px';
+        }
+
+        function onPointerUp(e) {
+          if (!dragging || e.pointerId !== pointerId) return;
+          dragging = false;
+          pointerId = null;
+          if (handle) handle.style.cursor = 'grab';
+          container.style.transition = '';
+          try { (e.target || e.srcElement).releasePointerCapture && (e.target || e.srcElement).releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+
+        if (handle) {
+          handle.addEventListener('pointerdown', onPointerDown);
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+          window.addEventListener('pointercancel', onPointerUp);
+        } else {
+          // fallback: allow dragging from entire container
+          container.addEventListener('pointerdown', onPointerDown);
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+          window.addEventListener('pointercancel', onPointerUp);
+        }
+      })();
     </script>
   </body>
 </html>
