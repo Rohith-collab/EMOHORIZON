@@ -802,14 +802,19 @@
                 if (emotionLabel) emotionLabel.innerText = 'Emotion: ' + dominantEmotion;
                 window.currentEmotion = dominantEmotion;
                 window.dispatchEvent(new CustomEvent('emotion:update', { detail: { emotion: dominantEmotion } }));
+                // Update global state or trigger reactions here
+                // Example: console.log("Detected emotion:", dominantEmotion);
               } else {
                 if (emotionLabel) emotionLabel.innerText = 'No face detected';
                 window.currentEmotion = null;
               }
             };
 
+            // Clear previous intervals
             if (detectionInterval) clearInterval(detectionInterval);
-            detectionInterval = setInterval(runDetection, 200);
+
+            // Run detection every 500 ms
+            detectionInterval = setInterval(runDetection, 500);
 
             video.addEventListener('pause', () => {
               if (detectionInterval) clearInterval(detectionInterval);
