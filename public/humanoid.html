@@ -773,8 +773,11 @@
       data-orientation="horizontal"
       data-position="right">
     </script>
+    <!-- Camera detection launcher -->
+    <button id="openCameraBtn" aria-label="Open Camera" title="Open Camera" style="position:fixed; bottom:20px; right:20px; width:56px; height:56px; border-radius:999px; z-index:80; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; display:flex; align-items:center; justify-content:center;">📷</button>
+
     <!-- Camera detection widget -->
-    <div id="cameraPreview" style="display:none; position:fixed; bottom:20px; right:20px; width:320px; max-width:90vw; z-index:70;">
+    <div id="cameraPreview" style="display:none; position:fixed; bottom:96px; right:20px; width:320px; max-width:90vw; z-index:70;">
       <div class="card" style="padding:12px; border-radius:12px; background: var(--card); box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="font-weight:700;">Camera</div>
