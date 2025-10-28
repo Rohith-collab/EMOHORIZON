@@ -1,515 +1,561 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Humanoid AI Tutor</title>
+    <style>
+      :root {
+        --bg1: #0a0a1a;
+        --bg2: #0f1025;
+        --nova: #6d28d9;
+        --electric: #00b7ff;
+        --cyber: #00ff88;
+        --card: rgba(255, 255, 255, 0.06);
+        --card-border: rgba(255, 255, 255, 0.16);
+        --text: #ffffff;
+        --muted: #a1a1aa;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Humanoid AI Tutor</title>
-  <style>
-    :root {
-      --bg1: #0a0a1a;
-      --bg2: #0f1025;
-      --nova: #6d28d9;
-      --electric: #00b7ff;
-      --cyber: #00ff88;
-      --card: rgba(255, 255, 255, 0.06);
-      --card-border: rgba(255, 255, 255, 0.16);
-      --text: #ffffff;
-      --muted: #a1a1aa;
-    }
+      * {
+        box-sizing: border-box;
+      }
 
-    * {
-      box-sizing: border-box;
-    }
+      html,
+      body {
+        height: 100%;
+      }
 
-    html,
-    body {
-      height: 100%;
-    }
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+        background:
+          radial-gradient(
+            80rem 50rem at 10% 10%,
+            rgba(109, 40, 217, 0.15),
+            transparent 60%
+          ),
+          radial-gradient(
+            60rem 40rem at 90% 20%,
+            rgba(0, 183, 255, 0.12),
+            transparent 55%
+          ),
+          radial-gradient(
+            70rem 50rem at 50% 100%,
+            rgba(0, 255, 136, 0.12),
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--bg1), var(--bg2));
+        overflow-x: hidden;
+      }
 
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        Segoe UI,
-        Roboto,
-        Arial,
-        sans-serif;
-      background:
-        radial-gradient(80rem 50rem at 10% 10%,
-          rgba(109, 40, 217, 0.15),
-          transparent 60%),
-        radial-gradient(60rem 40rem at 90% 20%,
-          rgba(0, 183, 255, 0.12),
-          transparent 55%),
-        radial-gradient(70rem 50rem at 50% 100%,
-          rgba(0, 255, 136, 0.12),
-          transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      overflow-x: hidden;
-    }
-
-    /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: linear-gradient(180deg,
+      /* Header */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: linear-gradient(
+          180deg,
           rgba(0, 0, 0, 0.35),
-          rgba(0, 0, 0, 0));
-      backdrop-filter: blur(6px);
-    }
-
-    .nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #e5e7eb;
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-    }
-
-    .back-link:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    .title {
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(90deg,
-          rgba(109, 40, 217, 0.25),
-          rgba(0, 183, 255, 0.25));
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      font-size: 12px;
-      color: #e5e7eb;
-    }
-
-    /* Layout */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 20px 40px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    @media (min-width: 980px) {
-      .grid {
-        grid-template-columns: 1.25fr 0.85fr;
-        gap: 28px;
-      }
-    }
-
-    /* Card */
-    .card {
-      position: relative;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(135deg,
-          rgba(109, 40, 217, 0.5),
-          rgba(0, 183, 255, 0.5),
-          rgba(0, 255, 136, 0.45));
-      filter: blur(18px);
-      z-index: -1;
-      opacity: 0.35;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .card-title {
-      font-weight: 700;
-    }
-
-    .card-sub {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .card-body {
-      padding: 0;
-    }
-
-    /* D-ID Agent */
-    #did-agent-container {
-      width: 100%;
-      height: 520px;
-      background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.06),
-          rgba(255, 255, 255, 0.02));
-    }
-
-    /* Info panel */
-    .panel {
-      display: grid;
-      gap: 16px;
-    }
-
-    .panel .tip {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* Quick chat in tips */
-    .tip-chat {
-      display: grid;
-      gap: 10px;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .tip-chat .row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-    }
-
-    .tip-chat input[type="text"] {
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text);
-    }
-
-    .tip-chat button {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: linear-gradient(90deg, var(--nova), var(--electric));
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .tip-chat .output {
-      color: #e5e7eb;
-      font-size: 14px;
-      white-space: pre-wrap;
-      min-height: 18px;
-    }
-
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: linear-gradient(90deg, var(--nova), var(--electric));
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 10px 30px rgba(0, 183, 255, 0.25);
-      transition:
-        transform 0.15s ease,
-        filter 0.15s ease;
-    }
-
-    .cta:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.05);
-    }
-
-    /* Footer note */
-    .footer {
-      margin-top: 24px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }
-    @media (max-width: 980px) {
-      .container {
-        padding: 18px 16px 32px;
+          rgba(0, 0, 0, 0)
+        );
+        backdrop-filter: blur(6px);
       }
 
       .nav {
-        padding: 10px 12px;
-      }
-
-      .card-header {
-        padding: 12px 14px;
-      }
-
-      .card-title {
-        font-size: 16px;
-      }
-
-      .card-sub {
-        font-size: 13px;
-      }
-
-      #did-agent-container {
-        height: 420px;
-      }
-
-      .tip-chat input[type="text"] {
-        padding: 10px;
-      }
-
-      .tip-chat button {
-        padding: 10px 12px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 14px 12px 28px;
-      }
-
-      .nav {
-        gap: 8px;
-      }
-
-      h1.title {
-        font-size: 20px !important;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      /* Make the agent smaller and allow it to flex on small devices */
-      #did-agent-container {
-        height: 320px;
-        min-height: 220px;
-      }
-
-      /* Stack the input and button for comfortable touch targets */
-      .tip-chat .row {
-        grid-template-columns: 1fr;
-      }
-
-      .tip-chat button {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-      }
-
-      .tip-chat input[type="text"] {
-        width: 100%;
-        padding: 12px;
-        font-size: 15px;
-      }
-
-      .tip-chat {
-        padding: 10px;
-      }
-
-      .cta {
-        width: 100%;
-        display: inline-flex;
-        justify-content: center;
-        padding: 12px 14px;
-      }
-
-      .panel .tip {
-        font-size: 14px;
-      }
-
-      .card {
-        border-radius: 12px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      #did-agent-container {
-        height: 260px;
-      }
-
-      .badge {
-        font-size: 11px;
-        padding: 5px 8px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .back-link {
-        padding: 6px 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #e5e7eb;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
+
+      .back-link:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.25);
       }
 
       .title {
-        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
       }
 
-      .footer {
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(
+          90deg,
+          rgba(109, 40, 217, 0.25),
+          rgba(0, 183, 255, 0.25)
+        );
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
         font-size: 12px;
+        color: #e5e7eb;
       }
-    }
 
-  </style>
-</head>
+      /* Layout */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px 20px 40px;
+      }
 
-<body>
-  <header>
-    <nav class="nav" aria-label="Top Navigation">
-      <a href="/" class="back-link" aria-label="Go to home">← Home</a>
-      <div>
-        <span class="badge" aria-label="Mode">Humanoid AI Tutor</span>
-      </div>
-      <div style="width: 80px"></div>
-    </nav>
-  </header>
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
 
-  <main class="container">
-    <section aria-labelledby="page-title" style="margin-bottom: 12px">
-      <h1 id="page-title" class="title" style="font-size: 28px; margin: 0 0 6px 0">
-        Humanoid AI Tutor
-      </h1>
-      <p class="card-sub">
-        Photorealistic AI tutor with natural conversation and emotions
-      </p>
-    </section>
+      @media (min-width: 980px) {
+        .grid {
+          grid-template-columns: 1.25fr 0.85fr;
+          gap: 28px;
+        }
+      }
 
-    <div class="grid">
-      <!-- Avatar / Agent -->
-      <section class="card" aria-label="AI Humanoid Agent">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Live AI Avatar</div>
-            <div class="card-sub">Powered by D-ID Web Agent</div>
-          </div>
-          <div class="badge" aria-hidden="true">Active</div>
+      /* Card */
+      .card {
+        position: relative;
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(
+          135deg,
+          rgba(109, 40, 217, 0.5),
+          rgba(0, 183, 255, 0.5),
+          rgba(0, 255, 136, 0.45)
+        );
+        filter: blur(18px);
+        z-index: -1;
+        opacity: 0.35;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .card-title {
+        font-weight: 700;
+      }
+
+      .card-sub {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .card-body {
+        padding: 0;
+      }
+
+      /* D-ID Agent */
+      #did-agent-container {
+        width: 100%;
+        height: 520px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.06),
+          rgba(255, 255, 255, 0.02)
+        );
+      }
+
+      /* Info panel */
+      .panel {
+        display: grid;
+        gap: 16px;
+      }
+
+      .panel .tip {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* Quick chat in tips */
+      .tip-chat {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .tip-chat .row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+      }
+
+      .tip-chat input[type="text"] {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+      }
+
+      .tip-chat button {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: linear-gradient(90deg, var(--nova), var(--electric));
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .tip-chat .output {
+        color: #e5e7eb;
+        font-size: 14px;
+        white-space: pre-wrap;
+        min-height: 18px;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, var(--nova), var(--electric));
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 10px 30px rgba(0, 183, 255, 0.25);
+        transition:
+          transform 0.15s ease,
+          filter 0.15s ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+      }
+
+      /* Footer note */
+      .footer {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+      @media (max-width: 980px) {
+        .container {
+          padding: 18px 16px 32px;
+        }
+
+        .nav {
+          padding: 10px 12px;
+        }
+
+        .card-header {
+          padding: 12px 14px;
+        }
+
+        .card-title {
+          font-size: 16px;
+        }
+
+        .card-sub {
+          font-size: 13px;
+        }
+
+        #did-agent-container {
+          height: 420px;
+        }
+
+        .tip-chat input[type="text"] {
+          padding: 10px;
+        }
+
+        .tip-chat button {
+          padding: 10px 12px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 14px 12px 28px;
+        }
+
+        .nav {
+          gap: 8px;
+        }
+
+        h1.title {
+          font-size: 20px !important;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+
+        /* Make the agent smaller and allow it to flex on small devices */
+        #did-agent-container {
+          height: 320px;
+          min-height: 220px;
+        }
+
+        /* Stack the input and button for comfortable touch targets */
+        .tip-chat .row {
+          grid-template-columns: 1fr;
+        }
+
+        .tip-chat button {
+          width: 100%;
+          padding: 14px;
+          font-size: 16px;
+        }
+
+        .tip-chat input[type="text"] {
+          width: 100%;
+          padding: 12px;
+          font-size: 15px;
+        }
+
+        .tip-chat {
+          padding: 10px;
+        }
+
+        .cta {
+          width: 100%;
+          display: inline-flex;
+          justify-content: center;
+          padding: 12px 14px;
+        }
+
+        .panel .tip {
+          font-size: 14px;
+        }
+
+        .card {
+          border-radius: 12px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        #did-agent-container {
+          height: 260px;
+        }
+
+        .badge {
+          font-size: 11px;
+          padding: 5px 8px;
+        }
+
+        .back-link {
+          padding: 6px 8px;
+        }
+
+        .title {
+          font-size: 18px;
+        }
+
+        .footer {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav class="nav" aria-label="Top Navigation">
+        <a href="/" class="back-link" aria-label="Go to home">← Home</a>
+        <div>
+          <span class="badge" aria-label="Mode">Humanoid AI Tutor</span>
         </div>
-        <div class="card-body">
-          <div id="did-agent-container" role="region" aria-label="D-ID Agent Container"></div>
-        </div>
+        <div style="width: 80px"></div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section aria-labelledby="page-title" style="margin-bottom: 12px">
+        <h1
+          id="page-title"
+          class="title"
+          style="font-size: 28px; margin: 0 0 6px 0"
+        >
+          Humanoid AI Tutor
+        </h1>
+        <p class="card-sub">
+          Photorealistic AI tutor with natural conversation and emotions
+        </p>
       </section>
 
-      <!-- Info / Controls -->
-      <aside class="card" aria-label="Session Information">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Session Tips</div>
-            <div class="card-sub">Best experience guidelines</div>
-          </div>
-        </div>
-        <div class="card-body" style="padding: 16px">
-          <div class="panel">
-            <p class="tip">
-              • Use a clear microphone and speak naturally. The tutor responds
-              with realistic voice and expressions.
-            </p>
-            <p class="tip">
-              • For topic changes, say for example: “Let’s practice interview
-              questions” or “Explain phrasal verbs.”
-            </p>
-            <p class="tip">
-              • You can mute/unmute or end the session anytime using the
-              controls inside the agent.
-            </p>
-
-            <div class="tip-chat" aria-label="Quick question to tutor">
-              <div class="card-sub">Ask the tutor</div>
-              <form id="tip-chat-form" class="row" autocomplete="off">
-                <input id="tip-chat-input" type="text" placeholder="Ask anything..." aria-label="Your question" required />
-                <button id="tip-chat-send" type="submit" aria-label="Send message">Ask</button>
-              </form>
-              <div id="tip-chat-output" class="output" role="status" aria-live="polite"></div>
+      <div class="grid">
+        <!-- Avatar / Agent -->
+        <section class="card" aria-label="AI Humanoid Agent">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Live AI Avatar</div>
+              <div class="card-sub">Powered by D-ID Web Agent</div>
             </div>
-
-            <a class="cta" href="/humanoid.html" aria-label="Restart Session">↻ Restart Session</a>
+            <div class="badge" aria-hidden="true">Active</div>
           </div>
-        </div>
-      </aside>
-    </div>
+          <div class="card-body">
+            <div
+              id="did-agent-container"
+              role="region"
+              aria-label="D-ID Agent Container"
+            ></div>
+          </div>
+        </section>
 
-    <p class="footer">
-      If video doesn’t load, refresh the page or check your network.
-    </p>
-  </main>
+        <!-- Info / Controls -->
+        <aside class="card" aria-label="Session Information">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Session Tips</div>
+              <div class="card-sub">Best experience guidelines</div>
+            </div>
+          </div>
+          <div class="card-body" style="padding: 16px">
+            <div class="panel">
+              <p class="tip">
+                • Use a clear microphone and speak naturally. The tutor responds
+                with realistic voice and expressions.
+              </p>
+              <p class="tip">
+                • For topic changes, say for example: “Let’s practice interview
+                questions” or “Explain phrasal verbs.”
+              </p>
+              <p class="tip">
+                • You can mute/unmute or end the session anytime using the
+                controls inside the agent.
+              </p>
 
-  <!-- D-ID Web Agent Integration (Full Mode) -->
-  <script type="module" src="https://agent.d-id.com/v2/index.js" data-mode="full"
-    data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
-    data-agent-id="v2_agt__m8h5T0f"
-    data-name="did-agent"
-    data-monitor="true"
-    data-target-id="did-agent-container">
-  </script>
-  <script>
-    (function () {
-      const form = document.getElementById('tip-chat-form');
-      const input = document.getElementById('tip-chat-input');
-      const output = document.getElementById('tip-chat-output');
-      const button = document.getElementById('tip-chat-send');
-      if (!form || !input || !output || !button) return;
+              <div class="tip-chat" aria-label="Quick question to tutor">
+                <div class="card-sub">Ask the tutor</div>
+                <form id="tip-chat-form" class="row" autocomplete="off">
+                  <input
+                    id="tip-chat-input"
+                    type="text"
+                    placeholder="Ask anything..."
+                    aria-label="Your question"
+                    required
+                  />
+                  <button
+                    id="tip-chat-send"
+                    type="submit"
+                    aria-label="Send message"
+                  >
+                    Ask
+                  </button>
+                </form>
+                <div
+                  id="tip-chat-output"
+                  class="output"
+                  role="status"
+                  aria-live="polite"
+                ></div>
+              </div>
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-        button.disabled = true;
-        const prev = button.textContent;
-        button.textContent = 'Sending...';
-        output.textContent = '';
-        try {
-          const res = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text })
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data && data.error ? data.error : 'Request failed');
-          output.textContent = (data && data.message) ? String(data.message) : '';
-        } catch (err) {
-          const msg = err && err.message ? err.message : 'Something went wrong';
-          output.textContent = 'Error: ' + msg;
-        } finally {
-          button.disabled = false;
-          button.textContent = prev || 'Ask';
-          input.value = '';
-          input.focus();
-        }
-      });
-    })();
-  </script>
-</body>
+              <a class="cta" href="/humanoid.html" aria-label="Restart Session"
+                >↻ Restart Session</a
+              >
+            </div>
+          </div>
+        </aside>
+      </div>
 
+      <p class="footer">
+        If video doesn’t load, refresh the page or check your network.
+      </p>
+    </main>
+
+    <!-- D-ID Web Agent Integration (Full Mode) -->
+    <script
+      type="module"
+      src="https://agent.d-id.com/v2/index.js"
+      data-mode="full"
+      data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
+      data-agent-id="v2_agt__m8h5T0f"
+      data-name="did-agent"
+      data-monitor="true"
+      data-target-id="did-agent-container"
+    ></script>
+    <script>
+      (function () {
+        const form = document.getElementById("tip-chat-form");
+        const input = document.getElementById("tip-chat-input");
+        const output = document.getElementById("tip-chat-output");
+        const button = document.getElementById("tip-chat-send");
+        if (!form || !input || !output || !button) return;
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const text = input.value.trim();
+          if (!text) return;
+          button.disabled = true;
+          const prev = button.textContent;
+          button.textContent = "Sending...";
+          output.textContent = "";
+          try {
+            const res = await fetch("/api/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message: text }),
+            });
+            const data = await res.json();
+            if (!res.ok)
+              throw new Error(
+                data && data.error ? data.error : "Request failed",
+              );
+            output.textContent =
+              data && data.message ? String(data.message) : "";
+          } catch (err) {
+            const msg =
+              err && err.message ? err.message : "Something went wrong";
+            output.textContent = "Error: " + msg;
+          } finally {
+            button.disabled = false;
+            button.textContent = prev || "Ask";
+            input.value = "";
+            input.focus();
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>
