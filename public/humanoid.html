@@ -765,6 +765,13 @@
             video.srcObject = stream;
             await video.play();
 
+            // Hide the overlay so the video is visible
+            const overlayEl = document.getElementById('cameraOverlay');
+            if (overlayEl) overlayEl.style.display = 'none';
+            // Ensure preview is shown
+            const previewEl = document.getElementById('cameraPreview');
+            if (previewEl) previewEl.classList.remove('camera-hidden');
+
             // Create canvas using faceapi helper if not already created
             if (!detectionCanvas) {
               detectionCanvas = faceapi.createCanvasFromMedia(video);
