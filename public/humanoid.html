@@ -194,6 +194,47 @@
       line-height: 1.6;
     }
 
+    /* Quick chat in tips */
+    .tip-chat {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tip-chat .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .tip-chat input[type="text"] {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    .tip-chat button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: linear-gradient(90deg, var(--nova), var(--electric));
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tip-chat .output {
+      color: #e5e7eb;
+      font-size: 14px;
+      white-space: pre-wrap;
+      min-height: 18px;
+    }
+
     .cta {
       display: inline-flex;
       align-items: center;
@@ -285,6 +326,16 @@
               • You can mute/unmute or end the session anytime using the
               controls inside the agent.
             </p>
+
+            <div class="tip-chat" aria-label="Quick question to tutor">
+              <div class="card-sub">Ask the tutor</div>
+              <form id="tip-chat-form" class="row" autocomplete="off">
+                <input id="tip-chat-input" type="text" placeholder="Ask anything..." aria-label="Your question" required />
+                <button id="tip-chat-send" type="submit" aria-label="Send message">Ask</button>
+              </form>
+              <div id="tip-chat-output" class="output" role="status" aria-live="polite"></div>
+            </div>
+
             <a class="cta" href="/humanoid.html" aria-label="Restart Session">↻ Restart Session</a>
           </div>
         </div>
@@ -303,6 +354,43 @@
     data-name="did-agent"
     data-monitor="true"
     data-target-id="did-agent-container">
+  </script>
+  <script>
+    (function () {
+      const form = document.getElementById('tip-chat-form');
+      const input = document.getElementById('tip-chat-input');
+      const output = document.getElementById('tip-chat-output');
+      const button = document.getElementById('tip-chat-send');
+      if (!form || !input || !output || !button) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+        button.disabled = true;
+        const prev = button.textContent;
+        button.textContent = 'Sending...';
+        output.textContent = '';
+        try {
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data && data.error ? data.error : 'Request failed');
+          output.textContent = (data && data.message) ? String(data.message) : '';
+        } catch (err) {
+          const msg = err && err.message ? err.message : 'Something went wrong';
+          output.textContent = 'Error: ' + msg;
+        } finally {
+          button.disabled = false;
+          button.textContent = prev || 'Ask';
+          input.value = '';
+          input.focus();
+        }
+      });
+    })();
   </script>
 </body>
 
