@@ -557,6 +557,105 @@
         text-align: center;
         font-weight: 500;
       }
+
+      /* Mobile adjustments */
+      @media (max-width: 600px) {
+        :root {
+          --card-border: rgba(0,0,0,0.06);
+        }
+
+        header .nav {
+          padding: 10px 12px;
+        }
+
+        .page-title {
+          font-size: 20px;
+        }
+
+        .page-subtitle {
+          font-size: 12px;
+        }
+
+        main {
+          padding: 16px 12px;
+        }
+
+        .card {
+          border-radius: 12px;
+        }
+
+        .card-header {
+          padding: 12px;
+        }
+
+        .chat-messages {
+          padding: 12px;
+          gap: 12px;
+        }
+
+        .message-content {
+          max-width: 100%;
+          font-size: 15px;
+          padding: 10px 12px;
+        }
+
+        .message-avatar {
+          width: 36px;
+          height: 36px;
+          font-size: 13px;
+        }
+
+        .chat-form {
+          padding: 10px;
+          gap: 8px;
+        }
+
+        .chat-input {
+          padding: 10px;
+          font-size: 15px;
+        }
+
+        .send-btn {
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        /* Make chat input sticky at bottom on mobile */
+        .card[aria-label="Chat Interface"] {
+          position: relative;
+        }
+
+        .card[aria-label="Chat Interface"] .chat-form {
+          position: sticky;
+          bottom: 0;
+          background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95));
+          z-index: 30;
+        }
+
+        /* Avatar area height for mobile */
+        #did-agent-container {
+          min-height: 220px;
+        }
+
+        /* Camera preview: move to bottom-right and reduce size */
+        #cameraPreview {
+          top: auto !important;
+          bottom: 20px !important;
+          right: 12px !important;
+          left: auto !important;
+          width: 240px !important;
+          max-width: 46vw !important;
+        }
+
+        /* Ensure draggable handle is large enough on touch */
+        #cameraPreview .card > div {
+          padding: 10px;
+        }
+
+        /* Reduce header elements spacing */
+        .nav { padding: 10px; }
+      }
+
     </style>
   </head>
   <body>
