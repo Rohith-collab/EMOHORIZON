@@ -471,6 +471,21 @@
 
       .camera-hidden { display: none; }
 
+      /* Emotion label */
+      .camera-emotion {
+        position: absolute;
+        left: 8px;
+        bottom: 8px;
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 12px;
+        border: 1px solid rgba(255,255,255,0.06);
+        backdrop-filter: blur(4px);
+        pointer-events: none;
+      }
+
     </style>
   </head>
   <body>
@@ -489,6 +504,7 @@
       <div id="cameraOverlay" class="camera-overlay">
         <button id="startCameraBtn" type="button">Start Camera</button>
       </div>
+      <div id="emotionLabel" class="camera-emotion">No face detected</div>
       <button id="closeCameraBtn" class="camera-close" aria-label="Close camera">✕</button>
     </div>
 
@@ -760,13 +776,20 @@
             faceapi.draw.drawDetections(canvas, resizedDetections);
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
+            const label = document.getElementById('emotionLabel');
             if (detections.length > 0) {
               const emotions = detections[0].expressions;
               const dominantEmotion = Object.keys(emotions).reduce((a, b) => (emotions[a] > emotions[b] ? a : b));
+              if (label) {
+                label.textContent = `Emotion: ${dominantEmotion}`;
+              }
               // expose emotion globally for optional use
               window.currentEmotion = dominantEmotion;
               // small event for consumers
               window.dispatchEvent(new CustomEvent('emotion:update', { detail: { emotion: dominantEmotion } }));
+            } else {
+              if (label) label.textContent = 'No face detected';
+              window.currentEmotion = null;
             }
           }
           requestAnimationFrame(detectEmotion);
