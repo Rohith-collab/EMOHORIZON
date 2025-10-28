@@ -849,6 +849,9 @@
             detectionCanvas.remove();
             detectionCanvas = null;
           }
+          // Show overlay again so user can restart camera
+          const overlayEl = document.getElementById('cameraOverlay');
+          if (overlayEl) overlayEl.style.display = 'flex';
           if (emotionLabel) emotionLabel.innerText = 'No face detected';
           window.currentEmotion = null;
         }
