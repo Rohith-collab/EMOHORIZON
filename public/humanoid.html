@@ -826,19 +826,23 @@
     // When the user clicks "Start Camera"
     document.getElementById('startCameraBtn').addEventListener('click', async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false,
-        });
-        video.srcObject = stream;
-        await video.play();
+        // Prefer existing camera starter if present (from other script)
+        if (typeof window.__startCamera === 'function') {
+          await window.__startCamera();
+        } else {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          video.srcObject = stream;
+          await video.play();
+        }
+
         console.log('Camera started, video size:', video.videoWidth, video.videoHeight);
-        document.getElementById('cameraOverlay').style.display = 'none';
+        const overlayEl = document.getElementById('cameraOverlay');
+        if (overlayEl) overlayEl.style.display = 'none';
         container.classList.remove('camera-hidden');
         startEmotionDetection();
       } catch (err) {
         console.error('Camera error:', err);
-        emotionLabel.textContent = 'Camera access denied';
+        if (emotionLabel) emotionLabel.textContent = 'Camera access denied';
       }
     });
 
