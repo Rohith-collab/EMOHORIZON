@@ -623,6 +623,75 @@
         </section>
       </div>
 
+      <!-- Camera Preview Section -->
+      <section class="camera-section">
+        <div class="card" aria-label="Camera Preview">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Camera Preview</div>
+              <div class="card-sub">View your webcam feed</div>
+            </div>
+            <div class="badge" id="cameraStatus" aria-hidden="true">Offline</div>
+          </div>
+
+          <div class="card-body" style="align-items: center; justify-content: center;">
+            <div class="camera-container" style="width: 100%; max-width: 100%;">
+              <video
+                id="cameraPreview"
+                playsinline
+                muted
+                style="display: none; width: 100%; border-radius: 12px;"
+              ></video>
+              <div
+                id="cameraPlaceholder"
+                style="width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(240, 249, 255, 0.4), rgba(248, 249, 250, 0.4)); border-radius: 12px;"
+              >
+                <div style="text-align: center;">
+                  <svg
+                    class="w-12 h-12 mx-auto text-gray-400 mb-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    style="width: 48px; height: 48px; margin: 0 auto 12px; color: #d1d5db;"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <p style="color: #6b7280; font-size: 14px;">Click "Start Camera" to enable preview</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="camera-controls">
+              <button
+                type="button"
+                class="camera-btn start"
+                id="startCameraBtn"
+                onclick="startCamera()"
+              >
+                ▶ Start Camera
+              </button>
+              <button
+                type="button"
+                class="camera-btn stop"
+                id="stopCameraBtn"
+                onclick="stopCamera()"
+                disabled
+              >
+                ⏹ Stop Camera
+              </button>
+            </div>
+            <div class="camera-status" id="cameraStatusText">
+              Camera is offline
+            </div>
+          </div>
+        </div>
+      </section>
+
       <p class="footer">
         If avatar doesn't load, refresh the page or check your network
         connection.
