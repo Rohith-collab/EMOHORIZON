@@ -449,7 +449,7 @@
       }
 
       /* Camera Preview */
-      .camera-section {
+      .camera-section { /* kept for layout fallback */
         margin-top: 24px;
       }
 
@@ -549,6 +549,27 @@
         }
       }
 
+      /* Floating camera (top-right) */
+      .floating-camera {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 320px;
+        max-width: 36vw;
+        z-index: 60;
+        margin-top: 0;
+      }
+      .floating-camera .card {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+      }
+      @media (max-width: 980px) {
+        .floating-camera {
+          display: none;
+        }
+      }
+
       /* Footer */
       .footer {
         margin-top: 24px;
@@ -645,7 +666,7 @@
       </div>
 
       <!-- Camera Preview Section -->
-      <section class="camera-section">
+      <section class="camera-section floating-camera" id="floatingCamera">
         <div class="card" aria-label="Camera Preview">
           <div class="card-header">
             <div>
