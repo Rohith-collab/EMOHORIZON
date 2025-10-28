@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Chat from "./pages/Chat";
 import Features from "./pages/Features";
 import About from "./pages/About";
+import Humanoid from "./pages/Humanoid";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
