@@ -1,11 +1,19 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import { handleDemo } from "./routes/demo";
 import { handleAzureChat } from "./routes/azure-chat";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 export function createServer() {
   const app = express();
+
+  // Serve static files from public directory FIRST
+  const publicPath = path.join(__dirname, "..", "public");
+  app.use(express.static(publicPath));
 
   // Middleware
   app.use(cors());
