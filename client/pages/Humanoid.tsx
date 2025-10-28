@@ -249,18 +249,7 @@ export default function Humanoid() {
         </p>
       </main>
 
-      {/* D-ID Web Agent Script */}
-      <script
-        type="module"
-        src="https://agent.d-id.com/v2/index.js"
-        data-mode="fabio"
-        data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
-        data-agent-id="v2_agt__m8h5T0f"
-        data-name="did-agent"
-        data-monitor="true"
-        data-orientation="horizontal"
-        data-position="right"
-      />
+      {/* D-ID Web Agent Script - Add valid credentials to use */}
     </div>
   );
 }
