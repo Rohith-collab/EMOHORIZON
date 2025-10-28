@@ -931,5 +931,86 @@
         }
       })();
     </script>
+    <script>
+      // Draggable cameraPreview
+      (function () {
+        const container = document.getElementById('cameraPreview');
+        if (!container) return;
+        const handle = container.querySelector('.card > div');
+        container.style.touchAction = 'none';
+        if (handle) handle.style.cursor = 'grab';
+
+        let dragging = false;
+        let pointerId = null;
+        let startX = 0;
+        let startY = 0;
+        let startLeft = 0;
+        let startTop = 0;
+
+        function onPointerDown(e) {
+          if (e.button && e.button !== 0) return; // only left click
+          dragging = true;
+          pointerId = e.pointerId;
+          (e.target || e.srcElement).setPointerCapture && (e.target || e.srcElement).setPointerCapture(pointerId);
+
+          // compute current left/top
+          const rect = container.getBoundingClientRect();
+          // if right is used, convert to left
+          if (container.style.right && !container.style.left) {
+            container.style.left = rect.left + 'px';
+            container.style.right = 'auto';
+          }
+
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = rect.left;
+          startTop = rect.top;
+
+          if (handle) handle.style.cursor = 'grabbing';
+          container.style.transition = 'none';
+          e.preventDefault();
+        }
+
+        function onPointerMove(e) {
+          if (!dragging || e.pointerId !== pointerId) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          let newLeft = startLeft + dx;
+          let newTop = startTop + dy;
+
+          // constrain to viewport with 8px margin
+          const margin = 8;
+          const maxLeft = window.innerWidth - container.offsetWidth - margin;
+          const maxTop = window.innerHeight - container.offsetHeight - margin;
+          newLeft = Math.max(margin, Math.min(maxLeft, newLeft));
+          newTop = Math.max(margin, Math.min(maxTop, newTop));
+
+          container.style.left = newLeft + 'px';
+          container.style.top = newTop + 'px';
+        }
+
+        function onPointerUp(e) {
+          if (!dragging || e.pointerId !== pointerId) return;
+          dragging = false;
+          pointerId = null;
+          if (handle) handle.style.cursor = 'grab';
+          container.style.transition = '';
+          try { (e.target || e.srcElement).releasePointerCapture && (e.target || e.srcElement).releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+
+        if (handle) {
+          handle.addEventListener('pointerdown', onPointerDown);
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+          window.addEventListener('pointercancel', onPointerUp);
+        } else {
+          // fallback: allow dragging from entire container
+          container.addEventListener('pointerdown', onPointerDown);
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+          window.addEventListener('pointercancel', onPointerUp);
+        }
+      })();
+    </script>
   </body>
 </html>
