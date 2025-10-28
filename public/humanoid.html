@@ -698,6 +698,86 @@
       </p>
     </main>
 
+    <!-- Camera Logic -->
+    <script>
+      let cameraStream = null;
+
+      async function startCamera() {
+        try {
+          const video = document.getElementById("cameraPreview");
+          const placeholder = document.getElementById("cameraPlaceholder");
+          const startBtn = document.getElementById("startCameraBtn");
+          const stopBtn = document.getElementById("stopCameraBtn");
+          const statusBadge = document.getElementById("cameraStatus");
+          const statusText = document.getElementById("cameraStatusText");
+
+          // Request camera access
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              facingMode: "user",
+            },
+            audio: false,
+          });
+
+          // Set video source
+          video.srcObject = cameraStream;
+
+          // Show video, hide placeholder
+          video.style.display = "block";
+          placeholder.style.display = "none";
+
+          // Update button states
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+
+          // Update status
+          statusBadge.textContent = "Active";
+          statusBadge.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
+          statusBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
+          statusBadge.style.color = "#10b981";
+          statusText.textContent = "Camera is active";
+        } catch (error) {
+          console.error("Error accessing camera:", error);
+          const statusText = document.getElementById("cameraStatusText");
+          statusText.textContent =
+            "Camera access denied. Please check permissions.";
+          statusText.style.color = "#dc2626";
+        }
+      }
+
+      function stopCamera() {
+        const video = document.getElementById("cameraPreview");
+        const placeholder = document.getElementById("cameraPlaceholder");
+        const startBtn = document.getElementById("startCameraBtn");
+        const stopBtn = document.getElementById("stopCameraBtn");
+        const statusBadge = document.getElementById("cameraStatus");
+        const statusText = document.getElementById("cameraStatusText");
+
+        if (cameraStream) {
+          // Stop all tracks
+          cameraStream.getTracks().forEach((track) => track.stop());
+          cameraStream = null;
+        }
+
+        // Hide video, show placeholder
+        video.style.display = "none";
+        placeholder.style.display = "flex";
+
+        // Update button states
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+
+        // Update status
+        statusBadge.textContent = "Offline";
+        statusBadge.style.backgroundColor = "rgba(229, 231, 235, 0.5)";
+        statusBadge.style.borderColor = "rgba(0, 0, 0, 0.08)";
+        statusBadge.style.color = "var(--text-light)";
+        statusText.textContent = "Camera is offline";
+      }
+    </script>
+
     <!-- Chat Logic -->
     <script>
       const chatMessages = document.getElementById("chatMessages");
