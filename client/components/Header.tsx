@@ -25,7 +25,9 @@ export function Header() {
             </div>
             <div className="hidden sm:block">
               <div className="text-lg font-bold gradient-text">Humanoid AI</div>
-              <div className="text-xs text-muted-foreground">Sentiment Analysis</div>
+              <div className="text-xs text-muted-foreground">
+                Sentiment Analysis
+              </div>
             </div>
           </Link>
 
@@ -56,11 +58,7 @@ export function Header() {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 

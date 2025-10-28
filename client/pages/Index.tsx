@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Brain, Heart, MessageCircle, TrendingUp, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Zap,
+  Brain,
+  Heart,
+  MessageCircle,
+  TrendingUp,
+  Sparkles,
+} from "lucide-react";
 
 export default function Index() {
   return (
@@ -16,18 +24,26 @@ export default function Index() {
               <div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-4">
                   <Sparkles className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium text-primary">AI-Powered Conversation</span>
+                  <span className="text-sm font-medium text-primary">
+                    AI-Powered Conversation
+                  </span>
                 </div>
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                  Talk to <span className="gradient-text">Humanoid AI</span> That Understands You
+                  Talk to <span className="gradient-text">Humanoid AI</span>{" "}
+                  That Understands You
                 </h1>
                 <p className="text-xl text-muted-foreground mt-4">
-                  Experience advanced AI conversations with real-time sentiment analysis. Our humanoid chatbot understands emotions and responds with empathy.
+                  Experience advanced AI conversations with real-time sentiment
+                  analysis. Our humanoid chatbot understands emotions and
+                  responds with empathy.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/chat" className="btn-primary inline-flex items-center justify-center gap-2 text-base">
+                <Link
+                  to="/chat"
+                  className="btn-primary inline-flex items-center justify-center gap-2 text-base"
+                >
                   Start Chatting <ArrowRight className="w-4 h-4" />
                 </Link>
                 <button className="btn-secondary inline-flex items-center justify-center gap-2 text-base">
@@ -56,7 +72,9 @@ export default function Index() {
                 <div className="aspect-square rounded-xl bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 flex items-center justify-center">
                   <div className="text-center">
                     <Brain className="w-24 h-24 text-primary/30 mx-auto mb-4" />
-                    <p className="text-muted-foreground">AI Chatbot Interface</p>
+                    <p className="text-muted-foreground">
+                      AI Chatbot Interface
+                    </p>
                   </div>
                 </div>
               </div>
@@ -73,7 +91,8 @@ export default function Index() {
               Powered by <span className="gradient-text">Advanced ML</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our humanoid chatbot combines cutting-edge machine learning with emotional intelligence
+              Our humanoid chatbot combines cutting-edge machine learning with
+              emotional intelligence
             </p>
           </div>
 
@@ -82,40 +101,51 @@ export default function Index() {
               {
                 icon: Heart,
                 title: "Sentiment Analysis",
-                description: "Real-time emotion detection and empathetic responses tailored to user feelings"
+                description:
+                  "Real-time emotion detection and empathetic responses tailored to user feelings",
               },
               {
                 icon: Brain,
                 title: "Deep Learning",
-                description: "Advanced neural networks trained on millions of conversations for natural dialogue"
+                description:
+                  "Advanced neural networks trained on millions of conversations for natural dialogue",
               },
               {
                 icon: MessageCircle,
                 title: "Natural Conversation",
-                description: "Humanoid responses that feel genuine, personal, and contextually appropriate"
+                description:
+                  "Humanoid responses that feel genuine, personal, and contextually appropriate",
               },
               {
                 icon: Zap,
                 title: "Lightning Fast",
-                description: "Instant responses powered by optimized ML models and edge computing"
+                description:
+                  "Instant responses powered by optimized ML models and edge computing",
               },
               {
                 icon: TrendingUp,
                 title: "Learning & Improvement",
-                description: "Continuously improves through interactions while maintaining privacy"
+                description:
+                  "Continuously improves through interactions while maintaining privacy",
               },
               {
                 icon: Sparkles,
                 title: "Multi-Modal",
-                description: "Handles text, context, and intent analysis for comprehensive understanding"
-              }
+                description:
+                  "Handles text, context, and intent analysis for comprehensive understanding",
+              },
             ].map((feature, idx) => (
-              <div key={idx} className="card-glow p-6 hover:border-primary/50 transition-all group">
+              <div
+                key={idx}
+                className="card-glow p-6 hover:border-primary/50 transition-all group"
+              >
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 group-hover:bg-gradient-to-br group-hover:from-primary/30 group-hover:to-secondary/30 transition-colors">
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <p className="text-muted-foreground text-sm">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -130,7 +160,8 @@ export default function Index() {
               How <span className="gradient-text">It Works</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Three simple steps to experience AI conversations like never before
+              Three simple steps to experience AI conversations like never
+              before
             </p>
           </div>
 
@@ -139,22 +170,27 @@ export default function Index() {
               {
                 step: "01",
                 title: "Start a Conversation",
-                description: "Begin chatting naturally with our humanoid AI. Share your thoughts, questions, or ideas."
+                description:
+                  "Begin chatting naturally with our humanoid AI. Share your thoughts, questions, or ideas.",
               },
               {
                 step: "02",
                 title: "Real-time Sentiment Detection",
-                description: "Our ML models analyze your emotions and sentiment, understanding context and intent beneath the words."
+                description:
+                  "Our ML models analyze your emotions and sentiment, understanding context and intent beneath the words.",
               },
               {
                 step: "03",
                 title: "Empathetic AI Response",
-                description: "Receive thoughtful, contextual responses that acknowledge your emotional state and needs."
-              }
+                description:
+                  "Receive thoughtful, contextual responses that acknowledge your emotional state and needs.",
+              },
             ].map((item, idx) => (
               <div key={idx} className="relative">
                 <div className="card-glow p-8 bg-gradient-to-br from-card to-muted/20 h-full">
-                  <div className="text-5xl font-bold gradient-text mb-4 opacity-30">{item.step}</div>
+                  <div className="text-5xl font-bold gradient-text mb-4 opacity-30">
+                    {item.step}
+                  </div>
                   <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
                   <p className="text-muted-foreground">{item.description}</p>
                 </div>
@@ -184,7 +220,7 @@ export default function Index() {
                   "Concern, frustration, and negative emotions",
                   "Confusion and knowledge gaps",
                   "Engagement level and interest",
-                  "Implicit needs and desires"
+                  "Implicit needs and desires",
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3">
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0 mt-1">
@@ -198,14 +234,28 @@ export default function Index() {
             <div className="card-glow p-8 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
               <div className="space-y-4">
                 {[
-                  { label: "Positive Sentiment", value: 78, color: "from-accent" },
-                  { label: "Neutral Sentiment", value: 15, color: "from-primary" },
-                  { label: "Negative Sentiment", value: 7, color: "from-destructive" }
+                  {
+                    label: "Positive Sentiment",
+                    value: 78,
+                    color: "from-accent",
+                  },
+                  {
+                    label: "Neutral Sentiment",
+                    value: 15,
+                    color: "from-primary",
+                  },
+                  {
+                    label: "Negative Sentiment",
+                    value: 7,
+                    color: "from-destructive",
+                  },
                 ].map((item, idx) => (
                   <div key={idx}>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">{item.label}</span>
-                      <span className="text-sm font-bold gradient-text">{item.value}%</span>
+                      <span className="text-sm font-bold gradient-text">
+                        {item.value}%
+                      </span>
                     </div>
                     <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
                       <div
@@ -226,13 +276,18 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 -z-10" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Ready to Experience <span className="gradient-text">AI Conversations</span>?
+            Ready to Experience{" "}
+            <span className="gradient-text">AI Conversations</span>?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start chatting with our humanoid AI today and discover how sentiment analysis can enhance your interactions.
+            Start chatting with our humanoid AI today and discover how sentiment
+            analysis can enhance your interactions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/chat" className="btn-primary inline-flex items-center justify-center gap-2 text-base">
+            <Link
+              to="/chat"
+              className="btn-primary inline-flex items-center justify-center gap-2 text-base"
+            >
               Try Free Now <ArrowRight className="w-4 h-4" />
             </Link>
             <button className="btn-secondary inline-flex items-center justify-center gap-2 text-base">
