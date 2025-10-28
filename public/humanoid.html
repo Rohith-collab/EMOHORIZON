@@ -859,8 +859,6 @@
             detectionCanvas.style.width = '100%';
             detectionCanvas.style.height = '100%';
             detectionCanvas.style.pointerEvents = 'none';
-            // ensure container positioning
-            container.style.position = 'fixed';
             container.appendChild(detectionCanvas);
           }
 
@@ -895,44 +893,42 @@
           }, 300);
         }
 
-        // Open camera widget launcher
-        const openBtn = document.getElementById('openCameraBtn');
-        if (openBtn) {
-          openBtn.addEventListener('click', () => {
-            container.style.display = 'block';
-            const startBtn = document.getElementById('startCameraBtn');
-            if (startBtn) startBtn.focus();
+        // When the user clicks "Start Camera"
+        const startBtn = document.getElementById('startCameraBtn');
+        if (startBtn) {
+          startBtn.addEventListener('click', async () => {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false,
+              });
+              video.srcObject = stream;
+              await video.play();
+              const overlay = document.getElementById('cameraOverlay');
+              if (overlay) overlay.style.display = 'none';
+              container.classList.remove('camera-hidden');
+              container.style.display = 'block';
+              startEmotionDetection();
+            } catch (err) {
+              console.error('Camera error:', err);
+              emotionLabel.textContent = 'Camera access denied';
+            }
           });
         }
 
-        // When the user clicks "Start Camera"
-        document.getElementById('startCameraBtn').addEventListener('click', async () => {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-              video: true,
-              audio: false,
-            });
-            video.srcObject = stream;
-            await video.play();
-            document.getElementById('cameraOverlay').style.display = 'none';
-            container.style.display = 'block';
-            startEmotionDetection();
-          } catch (err) {
-            console.error('Camera error:', err);
-            emotionLabel.textContent = 'Camera access denied';
-          }
-        });
-
         // Stop detection and camera
-        document.getElementById('closeCameraBtn').addEventListener('click', () => {
-          clearInterval(intervalId);
-          if (video.srcObject) {
-            video.srcObject.getTracks().forEach((t) => t.stop());
-          }
-          video.srcObject = null;
-          emotionLabel.textContent = 'Camera stopped';
-          container.style.display = 'none';
-        });
+        const closeBtn = document.getElementById('closeCameraBtn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            clearInterval(intervalId);
+            if (video.srcObject) {
+              video.srcObject.getTracks().forEach((t) => t.stop());
+            }
+            video.srcObject = null;
+            emotionLabel.textContent = 'Camera stopped';
+            container.style.display = 'none';
+          });
+        }
       })();
     </script>
   </body>
