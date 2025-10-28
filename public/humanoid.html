@@ -710,164 +710,129 @@
     <!-- Face Detection & Emotion Analysis -->
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
-    <script>
-      (function () {
-        const video = document.getElementById('cameraVideo');
-        const startBtn = document.getElementById('startCameraBtn');
-        const emotionLabel = document.getElementById('emotionLabel');
-        const container = document.getElementById('cameraPreview');
+<script>
+  (function () {
+    const video = document.getElementById('cameraVideo');
+    const emotionLabel = document.getElementById('emotionLabel');
+    const container = document.getElementById('cameraPreview');
 
-        // Wait for faceapi to be available
-        const waitForFaceApi = async (timeout = 15000) => {
-          const start = Date.now();
-          while (typeof window.faceapi === 'undefined') {
-            if (Date.now() - start > timeout) throw new Error('face-api.js failed to load within timeout');
-            await new Promise((r) => setTimeout(r, 100));
-          }
-        };
+    // Wait for faceapi
+    const waitForFaceApi = async (timeout = 15000) => {
+      const start = Date.now();
+      while (typeof window.faceapi === 'undefined') {
+        if (Date.now() - start > timeout)
+          throw new Error('face-api.js failed to load within timeout');
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    };
 
-        // Load models from /models, fallback to CDN weights
-        const loadModels = async () => {
-          await waitForFaceApi();
-          try {
-            await Promise.all([
-              faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-              faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-              faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-            ]);
-            console.log('✅ face-api models loaded from /models');
-          } catch (err) {
-            console.warn('Failed to load models from /models, falling back to CDN weights:', err);
-            await Promise.all([
-              faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'),
-              faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'),
-              faceapi.nets.faceLandmark68Net.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'),
-            ]);
-            console.log('✅ face-api models loaded from CDN');
-          }
-        };
+    const loadModels = async () => {
+      await waitForFaceApi();
+      try {
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+          faceapi.nets.faceExpressionNet.loadFromUri('/models'),
+          faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+        ]);
+        console.log('✅ face-api models loaded from /models');
+      } catch (err) {
+        console.warn('⚠️ Loading from /models failed, using CDN fallback.');
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri(
+            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+          ),
+          faceapi.nets.faceExpressionNet.loadFromUri(
+            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+          ),
+          faceapi.nets.faceLandmark68Net.loadFromUri(
+            'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
+          ),
+        ]);
+        console.log('✅ face-api models loaded from CDN.');
+      }
+    };
 
-        const modelsReady = loadModels();
+    const modelsReady = loadModels();
+    let detectionCanvas = null;
+    let intervalId = null;
 
-        let detectionInterval = null;
-        let detectionCanvas = null;
+    async function startEmotionDetection() {
+      await modelsReady;
 
-        async function startCamera() {
-          try {
-            await modelsReady;
-          } catch (err) {
-            console.warn('Models did not finish loading:', err);
-          }
+      // Create overlay canvas if not present
+      if (!detectionCanvas) {
+        detectionCanvas = faceapi.createCanvasFromMedia(video);
+        detectionCanvas.style.position = 'absolute';
+        detectionCanvas.style.top = 0;
+        detectionCanvas.style.left = 0;
+        detectionCanvas.style.width = '100%';
+        detectionCanvas.style.height = '100%';
+        detectionCanvas.style.pointerEvents = 'none';
+        container.appendChild(detectionCanvas);
+      }
 
-          try {
-            if (video.srcObject) return;
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-            video.srcObject = stream;
-            await video.play();
+      const ctx = detectionCanvas.getContext('2d');
+      const displaySize = { width: video.videoWidth, height: video.videoHeight };
+      faceapi.matchDimensions(detectionCanvas, displaySize);
 
-            // Hide the overlay so the video is visible
-            const overlayEl = document.getElementById('cameraOverlay');
-            if (overlayEl) overlayEl.style.display = 'none';
-            // Ensure preview is shown
-            const previewEl = document.getElementById('cameraPreview');
-            if (previewEl) previewEl.classList.remove('camera-hidden');
+      clearInterval(intervalId);
+      intervalId = setInterval(async () => {
+        if (video.readyState !== 4) return;
 
-            // Create canvas using faceapi helper if not already created
-            if (!detectionCanvas) {
-              detectionCanvas = faceapi.createCanvasFromMedia(video);
-              detectionCanvas.style.position = 'absolute';
-              detectionCanvas.style.top = '0';
-              detectionCanvas.style.left = '0';
-              detectionCanvas.style.width = '100%';
-              detectionCanvas.style.height = '100%';
-              detectionCanvas.style.pointerEvents = 'none';
-              container.appendChild(detectionCanvas);
-            }
+        const detections = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceExpressions();
 
-            const ctx = detectionCanvas.getContext('2d');
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
+        faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
+        faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
 
-            const runDetection = async () => {
-              if (video.readyState !== 4) return;
-              const displaySize = { width: video.videoWidth, height: video.videoHeight };
-              faceapi.matchDimensions(detectionCanvas, displaySize);
-
-              const detections = await faceapi
-                .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-                .withFaceLandmarks()
-                .withFaceExpressions();
-
-              const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
-              ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
-              faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
-              faceapi.draw.drawFaceLandmarks(detectionCanvas, resizedDetections);
-              faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
-
-              if (detections.length > 0) {
-                const emotions = detections[0].expressions;
-                const dominantEmotion = Object.keys(emotions).reduce((a, b) => (emotions[a] > emotions[b] ? a : b));
-                if (emotionLabel) emotionLabel.innerText = 'Emotion: ' + dominantEmotion;
-                window.currentEmotion = dominantEmotion;
-                window.dispatchEvent(new CustomEvent('emotion:update', { detail: { emotion: dominantEmotion } }));
-                // Update global state or trigger reactions here
-                // Example: console.log("Detected emotion:", dominantEmotion);
-              } else {
-                if (emotionLabel) emotionLabel.innerText = 'No face detected';
-                window.currentEmotion = null;
-              }
-            };
-
-            // Clear previous intervals
-            if (detectionInterval) clearInterval(detectionInterval);
-
-            // Run detection every 500 ms
-            detectionInterval = setInterval(runDetection, 500);
-
-            video.addEventListener('pause', () => {
-              if (detectionInterval) clearInterval(detectionInterval);
-            });
-            video.addEventListener('ended', () => {
-              if (detectionInterval) clearInterval(detectionInterval);
-            });
-          } catch (err) {
-            console.error('Camera error:', err);
-            if (emotionLabel) emotionLabel.innerText = 'Camera unavailable';
-          }
+        if (detections.length > 0) {
+          const emotions = detections[0].expressions;
+          const mainEmotion = Object.keys(emotions).reduce((a, b) =>
+            emotions[a] > emotions[b] ? a : b
+          );
+          const confidence = (emotions[mainEmotion] * 100).toFixed(1);
+          emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
+          // Update global state or trigger reactions here
+          // Example: console.log("Detected emotion:", mainEmotion);
+        } else {
+          emotionLabel.textContent = 'No face detected';
         }
+      }, 300);
+    }
 
-        function stopCamera() {
-          if (video && video.srcObject) {
-            const tracks = video.srcObject.getTracks();
-            tracks.forEach((t) => t.stop());
-            video.srcObject = null;
-          }
-          if (detectionInterval) {
-            clearInterval(detectionInterval);
-            detectionInterval = null;
-          }
-          if (detectionCanvas) {
-            detectionCanvas.remove();
-            detectionCanvas = null;
-          }
-          // Show overlay again so user can restart camera
-          const overlayEl = document.getElementById('cameraOverlay');
-          if (overlayEl) overlayEl.style.display = 'flex';
-          if (emotionLabel) emotionLabel.innerText = 'No face detected';
-          window.currentEmotion = null;
-        }
-
-        startBtn?.addEventListener('click', (e) => {
-          e.preventDefault();
-          startCamera();
+    // When the user clicks "Start Camera"
+    document.getElementById('startCameraBtn').addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
         });
+        video.srcObject = stream;
+        await video.play();
+        document.getElementById('cameraOverlay').style.display = 'none';
+        container.classList.remove('camera-hidden');
+        startEmotionDetection();
+      } catch (err) {
+        console.error('Camera error:', err);
+        emotionLabel.textContent = 'Camera access denied';
+      }
+    });
 
-        window.__startCamera = startCamera;
-        window.__stopCamera = stopCamera;
-
-        window.addEventListener('pagehide', stopCamera);
-        window.addEventListener('beforeunload', stopCamera);
-      })();
-    </script>
+    // Stop detection and camera
+    document.getElementById('closeCameraBtn').addEventListener('click', () => {
+      clearInterval(intervalId);
+      if (video.srcObject) {
+        video.srcObject.getTracks().forEach((t) => t.stop());
+      }
+      video.srcObject = null;
+      emotionLabel.textContent = 'Camera stopped';
+    });
+  })();
+</script>
 
     <!-- Chat Logic -->
     <script>
