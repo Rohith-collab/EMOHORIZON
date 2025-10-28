@@ -1,1114 +1,309 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Humanoid AI Tutor</title>
-    <style>
-      :root {
-        --bg1: #ffffff;
-        --bg2: #f8f9fa;
-        --primary: #7c3aed;
-        --secondary: #0ea5e9;
-        --accent: #10b981;
-        --card: rgba(255, 255, 255, 0.95);
-        --card-border: rgba(0, 0, 0, 0.08);
-        --text: #1f2937;
-        --text-light: #6b7280;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Humanoid AI Tutor</title>
+  <style>
+    :root {
+      --bg1: #0a0a1a;
+      --bg2: #0f1025;
+      --nova: #6d28d9;
+      --electric: #00b7ff;
+      --cyber: #00ff88;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.16);
+      --text: #ffffff;
+      --muted: #a1a1aa;
+    }
 
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      body {
-        color: var(--text);
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-          sans-serif;
-        background: linear-gradient(
-          135deg,
-          #f0f9ff 0%,
-          #f8f9fa 50%,
-          #fef3c7 100%
-        );
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-      }
+    html,
+    body {
+      height: 100%;
+    }
 
-      /* Header */
-      header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.95),
-          rgba(255, 255, 255, 0.85)
-        );
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
+      background:
+        radial-gradient(80rem 50rem at 10% 10%,
+          rgba(109, 40, 217, 0.15),
+          transparent 60%),
+        radial-gradient(60rem 40rem at 90% 20%,
+          rgba(0, 183, 255, 0.12),
+          transparent 55%),
+        radial-gradient(70rem 50rem at 50% 100%,
+          rgba(0, 255, 136, 0.12),
+          transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x: hidden;
+    }
 
-      .nav {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(180deg,
+          rgba(0, 0, 0, 0.35),
+          rgba(0, 0, 0, 0));
+      backdrop-filter: blur(6px);
+    }
 
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--text);
-        text-decoration: none;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 8px 12px;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        background: rgba(255, 255, 255, 0.5);
-        font-weight: 500;
-      }
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-      .back-link:hover {
-        background: rgba(124, 58, 237, 0.1);
-        border-color: rgba(124, 58, 237, 0.3);
-        color: var(--primary);
-        transform: translateX(-2px);
-      }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #e5e7eb;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
 
-      .title {
-        font-weight: 800;
-        letter-spacing: 0.02em;
-      }
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
 
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(
-          90deg,
-          rgba(124, 58, 237, 0.15),
-          rgba(14, 165, 233, 0.15)
-        );
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(124, 58, 237, 0.3);
-        font-size: 12px;
-        color: var(--primary);
-        font-weight: 600;
-      }
+    .title {
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
 
-      /* Layout */
-      main {
-        flex: 1;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 24px 20px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-      }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(90deg,
+          rgba(109, 40, 217, 0.25),
+          rgba(0, 183, 255, 0.25));
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 12px;
+      color: #e5e7eb;
+    }
 
-      .page-header {
-        margin-bottom: 24px;
-      }
+    /* Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
 
-      .page-title {
-        font-size: 28px;
-        font-weight: 800;
-        letter-spacing: 0.02em;
-        margin: 0 0 6px 0;
-        background: linear-gradient(
-          135deg,
-          var(--primary) 0%,
-          var(--secondary) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
 
-      .page-subtitle {
-        color: var(--text-light);
-        font-size: 14px;
-        margin: 0;
-      }
-
+    @media (min-width: 980px) {
       .grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 24px;
-        flex: 1;
+        grid-template-columns: 1.25fr 0.85fr;
+        gap: 28px;
       }
-
-      @media (min-width: 980px) {
-        .grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .grid > :first-child {
-          order: 1;
-        }
-        .grid > :last-child {
-          order: 2;
-        }
-      }
-
-      /* Card */
-      .card {
-        position: relative;
-        background: var(--card);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s ease;
-      }
-
-      .card:hover {
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-        transform: translateY(-4px);
-        border-color: rgba(124, 58, 237, 0.2);
-      }
-
-      .card::before {
-        content: "";
-        position: absolute;
-        inset: -2px;
-        background: linear-gradient(
-          135deg,
-          rgba(124, 58, 237, 0.1),
-          rgba(14, 165, 233, 0.1),
-          rgba(16, 185, 129, 0.1)
-        );
-        filter: blur(18px);
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .card:hover::before {
-        opacity: 0.5;
-      }
-
-      .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        flex-shrink: 0;
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.5),
-          rgba(124, 58, 237, 0.02)
-        );
-      }
-
-      .card-title {
-        font-weight: 700;
-        color: var(--text);
-      }
-
-      .card-sub {
-        color: var(--text-light);
-        font-size: 14px;
-      }
-
-      .card-body {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-
-      /* Chat */
-      .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        background: linear-gradient(
-          to bottom,
-          rgba(248, 249, 250, 0.5),
-          rgba(240, 249, 255, 0.3)
-        );
-      }
-
-      .chat-messages::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .chat-messages::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      .chat-messages::-webkit-scrollbar-thumb {
-        background: rgba(124, 58, 237, 0.3);
-        border-radius: 3px;
-      }
-
-      .chat-messages::-webkit-scrollbar-thumb:hover {
-        background: rgba(124, 58, 237, 0.5);
-      }
-
-      .message {
-        display: flex;
-        gap: 12px;
-        animation: slideIn 0.3s ease-out;
-      }
-
-      .message.user {
-        flex-direction: row-reverse;
-      }
-
-      .message-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        color: #fff;
-        font-size: 12px;
-        font-weight: bold;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .message.ai .message-avatar {
-        background: linear-gradient(135deg, var(--secondary), var(--accent));
-      }
-
-      .message.user .message-avatar {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-      }
-
-      .message-content {
-        flex: 1;
-        max-width: 80%;
-        padding: 12px 16px;
-        border-radius: 16px;
-        border: 1px solid rgba(0, 0, 0, 0.06);
-        font-size: 14px;
-        line-height: 1.5;
-        transition: all 0.2s ease;
-      }
-
-      .message.ai .message-content {
-        background: linear-gradient(
-          135deg,
-          rgba(248, 249, 250, 0.8),
-          rgba(240, 249, 255, 0.6)
-        );
-        border-radius: 16px 16px 4px 16px;
-        border-color: rgba(14, 165, 233, 0.2);
-        color: var(--text);
-      }
-
-      .message.ai .message-content:hover {
-        background: linear-gradient(
-          135deg,
-          rgba(240, 249, 255, 0.9),
-          rgba(224, 242, 254, 0.7)
-        );
-        border-color: rgba(14, 165, 233, 0.4);
-      }
-
-      .message.user .message-content {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        border-radius: 16px 16px 16px 4px;
-        color: white;
-        border-color: transparent;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
-      }
-
-      .message.user .message-content:hover {
-        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
-        transform: translateY(-1px);
-      }
-
-      .loading {
-        display: flex;
-        gap: 4px;
-        align-items: center;
-      }
-
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--primary);
-        opacity: 0.6;
-        animation: bounce 1.4s infinite;
-      }
-
-      .dot:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-
-      .dot:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-
-      /* Chat Input */
-      .chat-form {
-        display: flex;
-        gap: 12px;
-        padding: 16px;
-        border-top: 1px solid rgba(0, 0, 0, 0.06);
-        flex-shrink: 0;
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.5),
-          rgba(248, 249, 250, 0.3)
-        );
-      }
-
-      .chat-input {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1.5px solid rgba(124, 58, 237, 0.2);
-        border-radius: 8px;
-        padding: 10px 14px;
-        color: var(--text);
-        font-size: 14px;
-        outline: none;
-        transition: all 0.2s ease;
-        font-family: inherit;
-      }
-
-      .chat-input:focus {
-        background: white;
-        border-color: rgba(124, 58, 237, 0.5);
-        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-      }
-
-      .chat-input::placeholder {
-        color: var(--text-light);
-      }
-
-      .send-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        color: #fff;
-        font-weight: 600;
-        padding: 10px 14px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        border: none;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-        transition: all 0.2s ease;
-        font-size: 14px;
-        font-family: inherit;
-      }
-
-      .send-btn:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-      }
-
-      .send-btn:active:not(:disabled) {
-        transform: translateY(0);
-      }
-
-      .send-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      /* Avatar Container */
-      #did-agent-container {
-        width: 100%;
-        flex: 1;
-        background: linear-gradient(
-          135deg,
-          rgba(240, 249, 255, 0.4),
-          rgba(248, 249, 250, 0.4)
-        );
-        border-radius: 12px;
-        margin: 12px;
-      }
-
-      /* Camera Preview */
-      .camera-section { /* kept for layout fallback */
-        margin-top: 24px;
-      }
-
-      .camera-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        background: #000;
-      }
-
-      #cameraPreview {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 16px;
-      }
-
-      .camera-controls {
-        display: flex;
-        gap: 8px;
-        margin-top: 12px;
-        flex-wrap: wrap;
-      }
-
-      .camera-btn {
-        flex: 1;
-        min-width: 120px;
-        padding: 10px 14px;
-        border-radius: 8px;
-        border: none;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 14px;
-        font-family: inherit;
-      }
-
-      .camera-btn.start {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        color: white;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-      }
-
-      .camera-btn.start:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-      }
-
-      .camera-btn.stop {
-        background: rgba(239, 68, 68, 0.1);
-        color: #dc2626;
-        border: 1px solid rgba(220, 38, 38, 0.3);
-      }
-
-      .camera-btn.stop:hover {
-        background: rgba(239, 68, 68, 0.2);
-        border-color: rgba(220, 38, 38, 0.5);
-      }
-
-      .camera-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .camera-status {
-        font-size: 12px;
-        color: var(--text-light);
-        text-align: center;
-        margin-top: 8px;
-      }
-
-      /* Animations */
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes bounce {
-        0%,
-        80%,
-        100% {
-          opacity: 0.6;
-          transform: translateY(0);
-        }
-        40% {
-          opacity: 1;
-          transform: translateY(-8px);
-        }
-      }
-
-      /* Footer */
-      .footer {
-        margin-top: 24px;
-        color: var(--text-light);
-        font-size: 12px;
-        text-align: center;
-        font-weight: 500;
-      }
-
-      /* Mobile adjustments */
-      @media (max-width: 600px) {
-        :root {
-          --card-border: rgba(0,0,0,0.06);
-        }
-
-        header .nav {
-          padding: 10px 12px;
-        }
-
-        .page-title {
-          font-size: 20px;
-        }
-
-        .page-subtitle {
-          font-size: 12px;
-        }
-
-        main {
-          padding: 16px 12px;
-        }
-
-        .card {
-          border-radius: 12px;
-        }
-
-        .card-header {
-          padding: 12px;
-        }
-
-        .chat-messages {
-          padding: 12px;
-          gap: 12px;
-        }
-
-        .message-content {
-          max-width: 100%;
-          font-size: 15px;
-          padding: 10px 12px;
-        }
-
-        .message-avatar {
-          width: 36px;
-          height: 36px;
-          font-size: 13px;
-        }
-
-        .chat-form {
-          padding: 10px;
-          gap: 8px;
-        }
-
-        .chat-input {
-          padding: 10px;
-          font-size: 15px;
-        }
-
-        .send-btn {
-          padding: 10px 12px;
-          font-size: 14px;
-        }
-
-        /* Make chat input sticky at bottom on mobile */
-        .card[aria-label="Chat Interface"] {
-          position: relative;
-        }
-
-        .card[aria-label="Chat Interface"] .chat-form {
-          position: sticky;
-          bottom: 0;
-          background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95));
-          z-index: 30;
-        }
-
-        /* Avatar area height for mobile */
-        #did-agent-container {
-          min-height: 220px;
-        }
-
-        /* Camera preview: move to bottom-right and reduce size */
-        #cameraPreview {
-          top: auto !important;
-          bottom: 20px !important;
-          right: 12px !important;
-          left: auto !important;
-          width: 240px !important;
-          max-width: 46vw !important;
-        }
-
-        /* Ensure draggable handle is large enough on touch */
-        #cameraPreview .card > div {
-          padding: 10px;
-        }
-
-        /* Reduce header elements spacing */
-        .nav { padding: 10px; }
-      }
-
-    </style>
-  </head>
-  <body>
-    <header>
-      <nav class="nav" aria-label="Top Navigation">
-        <a href="/" class="back-link" aria-label="Go to home">← Home</a>
-        <div>
-          <span class="badge" aria-label="Mode">✨ Humanoid AI Tutor</span>
+    }
+
+    /* Card */
+    .card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg,
+          rgba(109, 40, 217, 0.5),
+          rgba(0, 183, 255, 0.5),
+          rgba(0, 255, 136, 0.45));
+      filter: blur(18px);
+      z-index: -1;
+      opacity: 0.35;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-title {
+      font-weight: 700;
+    }
+
+    .card-sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    /* D-ID Agent */
+    #did-agent-container {
+      width: 100%;
+      height: 520px;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.06),
+          rgba(255, 255, 255, 0.02));
+    }
+
+    /* Info panel */
+    .panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel .tip {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--nova), var(--electric));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 10px 30px rgba(0, 183, 255, 0.25);
+      transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    /* Footer note */
+    .footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="nav" aria-label="Top Navigation">
+      <a href="/" class="back-link" aria-label="Go to home">← Home</a>
+      <div>
+        <span class="badge" aria-label="Mode">Humanoid AI Tutor</span>
+      </div>
+      <div style="width: 80px"></div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section aria-labelledby="page-title" style="margin-bottom: 12px">
+      <h1 id="page-title" class="title" style="font-size: 28px; margin: 0 0 6px 0">
+        Humanoid AI Tutor
+      </h1>
+      <p class="card-sub">
+        Photorealistic AI tutor with natural conversation and emotions
+      </p>
+    </section>
+
+    <div class="grid">
+      <!-- Avatar / Agent -->
+      <section class="card" aria-label="AI Humanoid Agent">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Live AI Avatar</div>
+            <div class="card-sub">Powered by D-ID Web Agent</div>
+          </div>
+          <div class="badge" aria-hidden="true">Active</div>
         </div>
-        <div style="width: 80px"></div>
-      </nav>
-    </header>
-
-    <main>
-      <section class="page-header">
-        <h1 class="page-title">Humanoid AI Tutor</h1>
-        <p class="page-subtitle">
-          Photorealistic AI tutor with natural conversation and emotions
-        </p>
+        <div class="card-body">
+          <div id="did-agent-container" role="region" aria-label="D-ID Agent Container"></div>
+        </div>
       </section>
 
-      <div class="grid">
-        <!-- Avatar Section (First child, will be on left) -->
-        <section class="card" aria-label="AI Avatar">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Live AI Avatar</div>
-              <div class="card-sub">Powered by D-ID</div>
-            </div>
-            <div class="badge" aria-hidden="true">Active</div>
-          </div>
-
-          <div class="card-body">
-            <div
-              id="did-agent-container"
-              role="region"
-              aria-label="D-ID Agent Container"
-            ></div>
-          </div>
-        </section>
-
-        <!-- Chat Section (Second child, will be on right) -->
-        <section class="card" aria-label="Chat Interface">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Chat with Tutor</div>
-              <div class="card-sub">Ask questions and learn</div>
-            </div>
-            <div class="badge" aria-hidden="true">Active</div>
-          </div>
-
-          <div class="card-body">
-            <div class="chat-messages" id="chatMessages">
-              <div class="message ai">
-                <div class="message-avatar">T</div>
-                <div class="message-content">
-                  Hello! I'm your AI tutor. How can I help you learn today?
-                </div>
-              </div>
-            </div>
-
-            <form class="chat-form" id="chatForm">
-              <input
-                type="text"
-                class="chat-input"
-                id="messageInput"
-                placeholder="Ask me anything..."
-                autocomplete="off"
-              />
-              <button type="submit" class="send-btn" id="sendBtn">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
-            </form>
-          </div>
-        </section>
-      </div>
-
-      <p class="footer">
-        If avatar doesn't load, refresh the page or check your network
-        connection.
-      </p>
-    </main>
-
-    <!-- Chat Logic -->
-    <script>
-      const chatMessages = document.getElementById("chatMessages");
-      const messageInput = document.getElementById("messageInput");
-      const sendBtn = document.getElementById("sendBtn");
-      const chatForm = document.getElementById("chatForm");
-
-      let conversationHistory = [
-        {
-          role: "assistant",
-          content: "Hello! I'm your AI tutor. How can I help you learn today?",
-        },
-      ];
-
-      function addMessage(role, content) {
-        const messageEl = document.createElement("div");
-        messageEl.className = `message ${role}`;
-
-        const avatarEl = document.createElement("div");
-        avatarEl.className = "message-avatar";
-        avatarEl.textContent = role === "user" ? "Y" : "T";
-
-        const contentEl = document.createElement("div");
-        contentEl.className = "message-content";
-        contentEl.textContent = content;
-
-        messageEl.appendChild(avatarEl);
-        messageEl.appendChild(contentEl);
-        chatMessages.appendChild(messageEl);
-
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function showLoading() {
-        const messageEl = document.createElement("div");
-        messageEl.className = "message ai";
-        messageEl.id = "loading-message";
-
-        const avatarEl = document.createElement("div");
-        avatarEl.className = "message-avatar";
-        avatarEl.textContent = "T";
-
-        const loadingEl = document.createElement("div");
-        loadingEl.className = "loading";
-        loadingEl.innerHTML =
-          '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-
-        messageEl.appendChild(avatarEl);
-        messageEl.appendChild(loadingEl);
-        chatMessages.appendChild(messageEl);
-
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function removeLoading() {
-        const loadingEl = document.getElementById("loading-message");
-        if (loadingEl) loadingEl.remove();
-      }
-
-      chatForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const message = messageInput.value.trim();
-        if (!message) return;
-
-        messageInput.value = "";
-        sendBtn.disabled = true;
-
-        addMessage("user", message);
-        conversationHistory.push({
-          role: "user",
-          content: message,
-        });
-
-        showLoading();
-
-        try {
-          const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              message: message,
-              conversationHistory: conversationHistory,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to get response");
-          }
-
-          const data = await response.json();
-          removeLoading();
-
-          addMessage("ai", data.message);
-          conversationHistory.push({
-            role: "assistant",
-            content: data.message,
-          });
-        } catch (error) {
-          console.error("Error:", error);
-          removeLoading();
-          addMessage("ai", "Sorry, I encountered an error. Please try again.");
-        } finally {
-          sendBtn.disabled = false;
-          messageInput.focus();
-        }
-      });
-
-      messageInput.focus();
-    </script>
-
-    <script type="module"
-      src="https://agent.d-id.com/v2/index.js"
-      data-mode="fabio"
-      data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
-      data-name="did-agent"
-      data-monitor="true"
-      data-target-id="did-agent-container">
-  </script>
-    </script>
-    <!-- Camera detection launcher (hidden when preview is fixed) -->
-    <button id="openCameraBtn" aria-label="Open Camera" title="Open Camera" style="display:none; position:fixed; bottom:20px; right:20px; width:56px; height:56px; border-radius:999px; z-index:80; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; display:flex; align-items:center; justify-content:center;">📷</button>
-
-    <!-- Camera detection widget (fixed top-right) -->
-    <div id="cameraPreview" style="display:block; position:fixed; top:20px; right:20px; width:320px; max-width:90vw; z-index:70;">
-      <div class="card" style="padding:12px; border-radius:12px; background: var(--card); box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-weight:700;">Camera</div>
+      <!-- Info / Controls -->
+      <aside class="card" aria-label="Session Information">
+        <div class="card-header">
           <div>
-            <button id="closeCameraBtn" class="camera-btn stop" style="min-width:40px; padding:6px 8px;">✕</button>
+            <div class="card-title">Session Tips</div>
+            <div class="card-sub">Best experience guidelines</div>
           </div>
         </div>
-
-        <video id="cameraVideo" autoplay muted playsinline style="width:100%; height:auto; border-radius:8px; background:#000; margin-top:10px; display:block;"></video>
-
-        <div id="cameraOverlay" style="text-align:center; margin-top:8px;">
-          <div id="emotionLabel" style="font-size:13px; color:var(--text-light);">No face detected</div>
+        <div class="card-body" style="padding: 16px">
+          <div class="panel">
+            <p class="tip">
+              • Use a clear microphone and speak naturally. The tutor responds
+              with realistic voice and expressions.
+            </p>
+            <p class="tip">
+              • For topic changes, say for example: “Let’s practice interview
+              questions” or “Explain phrasal verbs.”
+            </p>
+            <p class="tip">
+              • You can mute/unmute or end the session anytime using the
+              controls inside the agent.
+            </p>
+            <a class="cta" href="/humanoid.html" aria-label="Restart Session">↻ Restart Session</a>
+          </div>
         </div>
-
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button id="startCameraBtn" class="camera-btn start" type="button" style="flex:1;">▶ Start Camera</button>
-        </div>
-      </div>
+      </aside>
     </div>
 
-    <!-- face-api.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <p class="footer">
+      If video doesn’t load, refresh the page or check your network.
+    </p>
+  </main>
 
-    <script>
-      (function () {
-        const video = document.getElementById('cameraVideo');
-        const emotionLabel = document.getElementById('emotionLabel');
-        const container = document.getElementById('cameraPreview');
+  <!-- D-ID Web Agent Integration (Full Mode) -->
+  <script type="module" src="https://agent.d-id.com/v2/index.js" data-mode="full"
+    data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
+    data-agent-id="v2_agt__m8h5T0f"
+    data-name="did-agent"
+    data-monitor="true"
+    data-target-id="did-agent-container">
+  </script>
+</body>
 
-        // Wait for faceapi
-        const waitForFaceApi = async (timeout = 15000) => {
-          const start = Date.now();
-          while (typeof window.faceapi === 'undefined') {
-            if (Date.now() - start > timeout)
-              throw new Error('face-api.js failed to load within timeout');
-            await new Promise((r) => setTimeout(r, 100));
-          }
-        };
-
-        const loadModels = async () => {
-          await waitForFaceApi();
-          try {
-            await Promise.all([
-              faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-              faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-              faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-            ]);
-            console.log('✅ face-api models loaded from /models');
-          } catch (err) {
-            console.warn('⚠️ Loading from /models failed, using CDN fallback.');
-            await Promise.all([
-              faceapi.nets.tinyFaceDetector.loadFromUri(
-                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-              ),
-              faceapi.nets.faceExpressionNet.loadFromUri(
-                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-              ),
-              faceapi.nets.faceLandmark68Net.loadFromUri(
-                'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights/'
-              ),
-            ]);
-            console.log('✅ face-api models loaded from CDN.');
-          }
-        };
-
-        const modelsReady = loadModels();
-        let detectionCanvas = null;
-        let intervalId = null;
-
-        async function startEmotionDetection() {
-          await modelsReady;
-
-          // Create overlay canvas if not present
-          if (!detectionCanvas) {
-            detectionCanvas = faceapi.createCanvasFromMedia(video);
-            detectionCanvas.style.position = 'absolute';
-            detectionCanvas.style.top = 0;
-            detectionCanvas.style.left = 0;
-            detectionCanvas.style.width = '100%';
-            detectionCanvas.style.height = '100%';
-            detectionCanvas.style.pointerEvents = 'none';
-            container.appendChild(detectionCanvas);
-          }
-
-          const ctx = detectionCanvas.getContext('2d');
-          const displaySize = { width: video.videoWidth, height: video.videoHeight };
-          faceapi.matchDimensions(detectionCanvas, displaySize);
-
-          clearInterval(intervalId);
-          intervalId = setInterval(async () => {
-            if (video.readyState !== 4) return;
-
-            const detections = await faceapi
-              .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-              .withFaceLandmarks()
-              .withFaceExpressions();
-
-            const resizedDetections = faceapi.resizeResults(detections, displaySize);
-            ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
-            faceapi.draw.drawDetections(detectionCanvas, resizedDetections);
-            faceapi.draw.drawFaceExpressions(detectionCanvas, resizedDetections);
-
-            if (detections.length > 0) {
-              const emotions = detections[0].expressions;
-              const mainEmotion = Object.keys(emotions).reduce((a, b) =>
-                emotions[a] > emotions[b] ? a : b
-              );
-              const confidence = (emotions[mainEmotion] * 100).toFixed(1);
-              emotionLabel.textContent = `${mainEmotion.toUpperCase()} (${confidence}%)`;
-            } else {
-              emotionLabel.textContent = 'No face detected';
-            }
-          }, 300);
-        }
-
-        // When the user clicks "Start Camera"
-        const startBtn = document.getElementById('startCameraBtn');
-        if (startBtn) {
-          startBtn.addEventListener('click', async () => {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false,
-              });
-              video.srcObject = stream;
-              await video.play();
-              const overlay = document.getElementById('cameraOverlay');
-              if (overlay) overlay.style.display = 'none';
-              container.classList.remove('camera-hidden');
-              container.style.display = 'block';
-              startEmotionDetection();
-            } catch (err) {
-              console.error('Camera error:', err);
-              emotionLabel.textContent = 'Camera access denied';
-            }
-          });
-        }
-
-        // Stop detection and camera
-        const closeBtn = document.getElementById('closeCameraBtn');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', () => {
-            clearInterval(intervalId);
-            if (video.srcObject) {
-              video.srcObject.getTracks().forEach((t) => t.stop());
-            }
-            video.srcObject = null;
-            emotionLabel.textContent = 'Camera stopped';
-            container.style.display = 'none';
-          });
-        }
-      })();
-    </script>
-    <script>
-      // Draggable cameraPreview
-      (function () {
-        const container = document.getElementById('cameraPreview');
-        if (!container) return;
-        const handle = container.querySelector('.card > div');
-        container.style.touchAction = 'none';
-        if (handle) handle.style.cursor = 'grab';
-
-        let dragging = false;
-        let pointerId = null;
-        let startX = 0;
-        let startY = 0;
-        let startLeft = 0;
-        let startTop = 0;
-
-        function onPointerDown(e) {
-          if (e.button && e.button !== 0) return; // only left click
-          dragging = true;
-          pointerId = e.pointerId;
-          (e.target || e.srcElement).setPointerCapture && (e.target || e.srcElement).setPointerCapture(pointerId);
-
-          // compute current left/top
-          const rect = container.getBoundingClientRect();
-          // if right is used, convert to left
-          if (container.style.right && !container.style.left) {
-            container.style.left = rect.left + 'px';
-            container.style.right = 'auto';
-          }
-
-          startX = e.clientX;
-          startY = e.clientY;
-          startLeft = rect.left;
-          startTop = rect.top;
-
-          if (handle) handle.style.cursor = 'grabbing';
-          container.style.transition = 'none';
-          e.preventDefault();
-        }
-
-        function onPointerMove(e) {
-          if (!dragging || e.pointerId !== pointerId) return;
-          const dx = e.clientX - startX;
-          const dy = e.clientY - startY;
-          let newLeft = startLeft + dx;
-          let newTop = startTop + dy;
-
-          // constrain to viewport with 8px margin
-          const margin = 8;
-          const maxLeft = window.innerWidth - container.offsetWidth - margin;
-          const maxTop = window.innerHeight - container.offsetHeight - margin;
-          newLeft = Math.max(margin, Math.min(maxLeft, newLeft));
-          newTop = Math.max(margin, Math.min(maxTop, newTop));
-
-          container.style.left = newLeft + 'px';
-          container.style.top = newTop + 'px';
-        }
-
-        function onPointerUp(e) {
-          if (!dragging || e.pointerId !== pointerId) return;
-          dragging = false;
-          pointerId = null;
-          if (handle) handle.style.cursor = 'grab';
-          container.style.transition = '';
-          try { (e.target || e.srcElement).releasePointerCapture && (e.target || e.srcElement).releasePointerCapture(e.pointerId); } catch (err) {}
-        }
-
-        if (handle) {
-          handle.addEventListener('pointerdown', onPointerDown);
-          window.addEventListener('pointermove', onPointerMove);
-          window.addEventListener('pointerup', onPointerUp);
-          window.addEventListener('pointercancel', onPointerUp);
-        } else {
-          // fallback: allow dragging from entire container
-          container.addEventListener('pointerdown', onPointerDown);
-          window.addEventListener('pointermove', onPointerMove);
-          window.addEventListener('pointerup', onPointerUp);
-          window.addEventListener('pointercancel', onPointerUp);
-        }
-      })();
-    </script>
-  </body>
 </html>
