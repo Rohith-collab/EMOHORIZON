@@ -265,6 +265,124 @@
       font-size: 12px;
       text-align: center;
     }
+    @media (max-width: 980px) {
+      .container {
+        padding: 18px 16px 32px;
+      }
+
+      .nav {
+        padding: 10px 12px;
+      }
+
+      .card-header {
+        padding: 12px 14px;
+      }
+
+      .card-title {
+        font-size: 16px;
+      }
+
+      .card-sub {
+        font-size: 13px;
+      }
+
+      #did-agent-container {
+        height: 420px;
+      }
+
+      .tip-chat input[type="text"] {
+        padding: 10px;
+      }
+
+      .tip-chat button {
+        padding: 10px 12px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 14px 12px 28px;
+      }
+
+      .nav {
+        gap: 8px;
+      }
+
+      h1.title {
+        font-size: 20px !important;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Make the agent smaller and allow it to flex on small devices */
+      #did-agent-container {
+        height: 320px;
+        min-height: 220px;
+      }
+
+      /* Stack the input and button for comfortable touch targets */
+      .tip-chat .row {
+        grid-template-columns: 1fr;
+      }
+
+      .tip-chat button {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+      }
+
+      .tip-chat input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      .tip-chat {
+        padding: 10px;
+      }
+
+      .cta {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+        padding: 12px 14px;
+      }
+
+      .panel .tip {
+        font-size: 14px;
+      }
+
+      .card {
+        border-radius: 12px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      #did-agent-container {
+        height: 260px;
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 5px 8px;
+      }
+
+      .back-link {
+        padding: 6px 8px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .footer {
+        font-size: 12px;
+      }
+    }
+
   </style>
 </head>
 
