@@ -234,7 +234,7 @@ export default function Humanoid() {
             gap: "20px",
             marginTop: "24px"
           }}
-          className="lg:grid-cols-5 lg:gap-7"
+          className="lg:grid-cols-2 lg:gap-7"
         >
           {/* Chat Section - Left */}
           <div
