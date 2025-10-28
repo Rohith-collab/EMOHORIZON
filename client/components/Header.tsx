@@ -9,6 +9,7 @@ export function Header() {
   const navLinks = [
     { label: "Home", path: "/" },
     { label: "Chat", path: "/chat" },
+    { label: "Humanoid", path: "/humanoid" },
     { label: "Features", path: "/features" },
     { label: "About", path: "/about" },
   ];
