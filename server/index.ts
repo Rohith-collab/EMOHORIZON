@@ -11,13 +11,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export function createServer() {
   const app = express();
 
+  // Serve static files from public directory FIRST
+  const publicPath = path.join(__dirname, "..", "public");
+  app.use(express.static(publicPath));
+
   // Middleware
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-
-  // Serve static files from public directory
-  app.use(express.static(path.join(__dirname, "..", "public")));
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
