@@ -493,18 +493,66 @@
       </p>
     </main>
 
-    <!-- D-ID Web Agent -->
-    <script
-      type="module"
-      src="https://agent.d-id.com/v2/index.js"
-      data-mode="fabio"
-      data-client-key="Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS"
-      data-agent-id="v2_agt__m8h5T0f"
-      data-name="did-agent"
-      data-monitor="true"
-      data-orientation="horizontal"
-      data-position="right"
-    ></script>
+    <!-- D-ID Web Agent (loaded safely with error handling) -->
+    <script>
+      // Suppress noisy third-party fetch errors from D-ID and provide a friendly UX fallback
+      window.__didAgentLoadFailed = false;
+
+      // Catch unhandled promise rejections and network 'Failed to fetch' originating from D-ID
+      window.addEventListener('unhandledrejection', (ev) => {
+        try {
+          const reason = ev.reason;
+          const msg = (reason && reason.message) || String(reason);
+          if (msg && msg.includes('Failed to fetch')) {
+            window.__didAgentLoadFailed = true;
+            console.warn('D-ID agent network request failed — avatar will be unavailable.', reason);
+            ev.preventDefault();
+          }
+        } catch (e) {
+          // ignore
+        }
+      });
+
+      window.addEventListener('error', (ev) => {
+        try {
+          const msg = ev && ev.message;
+          if (msg && msg.includes('Failed to fetch')) {
+            window.__didAgentLoadFailed = true;
+            console.warn('D-ID agent network request failed — avatar will be unavailable.');
+            ev.preventDefault();
+          }
+        } catch (e) {}
+      });
+
+      // Dynamically load D-ID agent script so we can handle load errors
+      (function loadDidAgent() {
+        const s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'https://agent.d-id.com/v2/index.js';
+        s.dataset.mode = 'fabio';
+        s.dataset.clientKey = 'Z29vZ2xlLW9hdXRoMnwxMTE0MDkyMjE1OTkzNjQ0OTgzMzA6Mlh0TW53bWxPb3g1VGk5ZVpUX2JS';
+        s.dataset.agentId = 'v2_agt__m8h5T0f';
+        s.dataset.name = 'did-agent';
+        s.dataset.monitor = 'true';
+        s.dataset.orientation = 'horizontal';
+        s.dataset.position = 'right';
+
+        s.onload = function () {
+          // If D-ID script loaded but later failed internally, the unhandledrejection handler will set the flag
+          if (window.__didAgentLoadFailed) {
+            // Optionally show a user-visible note
+            console.warn('D-ID agent loaded but failed to initialize correctly.');
+          }
+        };
+
+        s.onerror = function (err) {
+          window.__didAgentLoadFailed = true;
+          console.warn('Failed to load D-ID agent script — avatar will be unavailable.', err);
+        };
+
+        document.body.appendChild(s);
+      })();
+    </script>
 
     <!-- Chat Logic -->
     <script>
