@@ -33,16 +33,31 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors relative group"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              // Use regular anchor tag for static HTML files
+              if (link.path.endsWith('.html')) {
+                return (
+                  <a
+                    key={link.path}
+                    href={link.path}
+                    className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors relative group"
+                  >
+                    {link.label}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
+                  </a>
+                );
+              }
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors relative group"
+                >
+                  {link.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
+                </Link>
+              );
+            })}
           </div>
 
           {/* CTA Button */}
