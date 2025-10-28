@@ -484,6 +484,14 @@
       </nav>
     </header>
 
+    <div id="cameraPreview" class="camera-preview" aria-hidden="false">
+      <video id="cameraVideo" playsinline autoplay muted></video>
+      <div id="cameraOverlay" class="camera-overlay">
+        <button id="startCameraBtn" type="button">Start Camera</button>
+      </div>
+      <button id="closeCameraBtn" class="camera-close" aria-label="Close camera">✕</button>
+    </div>
+
     <main>
       <section class="page-header">
         <h1 class="page-title">Humanoid AI Tutor</h1>
