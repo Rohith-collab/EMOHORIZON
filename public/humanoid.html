@@ -6,15 +6,15 @@
     <title>Humanoid AI Tutor</title>
     <style>
       :root {
-        --bg1: #0a0a1a;
-        --bg2: #0f1025;
-        --nova: #6d28d9;
-        --electric: #00b7ff;
-        --cyber: #00ff88;
-        --card: rgba(255, 255, 255, 0.06);
-        --card-border: rgba(255, 255, 255, 0.16);
-        --text: #ffffff;
-        --muted: #a1a1aa;
+        --bg1: #ffffff;
+        --bg2: #f8f9fa;
+        --primary: #7c3aed;
+        --secondary: #0ea5e9;
+        --accent: #10b981;
+        --card: rgba(255, 255, 255, 0.95);
+        --card-border: rgba(0, 0, 0, 0.08);
+        --text: #1f2937;
+        --text-light: #6b7280;
       }
 
       * {
@@ -31,30 +31,18 @@
       body {
         color: var(--text);
         font-family:
-          Inter,
-          system-ui,
           -apple-system,
-          Segoe UI,
-          Roboto,
-          Arial,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          'Roboto',
+          'Oxygen',
+          'Ubuntu',
+          'Cantarell',
+          'Fira Sans',
+          'Droid Sans',
+          'Helvetica Neue',
           sans-serif;
-        background:
-          radial-gradient(
-            80rem 50rem at 10% 10%,
-            rgba(109, 40, 217, 0.15),
-            transparent 60%
-          ),
-          radial-gradient(
-            60rem 40rem at 90% 20%,
-            rgba(0, 183, 255, 0.12),
-            transparent 55%
-          ),
-          radial-gradient(
-            70rem 50rem at 50% 100%,
-            rgba(0, 255, 136, 0.12),
-            transparent 60%
-          ),
-          linear-gradient(180deg, var(--bg1), var(--bg2));
+        background: linear-gradient(135deg, #f0f9ff 0%, #f8f9fa 50%, #fef3c7 100%);
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -67,10 +55,11 @@
         z-index: 20;
         background: linear-gradient(
           180deg,
-          rgba(0, 0, 0, 0.35),
-          rgba(0, 0, 0, 0)
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.85)
         );
-        backdrop-filter: blur(6px);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
       }
 
       .nav {
@@ -86,19 +75,21 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        color: #e5e7eb;
+        color: var(--text);
         text-decoration: none;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 8px 12px;
         border-radius: 8px;
-        transition:
-          background 0.2s ease,
-          border-color 0.2s ease;
+        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.5);
+        font-weight: 500;
       }
 
       .back-link:hover {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(124, 58, 237, 0.1);
+        border-color: rgba(124, 58, 237, 0.3);
+        color: var(--primary);
+        transform: translateX(-2px);
       }
 
       .title {
@@ -112,14 +103,15 @@
         gap: 6px;
         background: linear-gradient(
           90deg,
-          rgba(109, 40, 217, 0.25),
-          rgba(0, 183, 255, 0.25)
+          rgba(124, 58, 237, 0.15),
+          rgba(14, 165, 233, 0.15)
         );
         padding: 6px 10px;
         border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(124, 58, 237, 0.3);
         font-size: 12px;
-        color: #e5e7eb;
+        color: var(--primary);
+        font-weight: 600;
       }
 
       /* Layout */
@@ -142,10 +134,14 @@
         font-weight: 800;
         letter-spacing: 0.02em;
         margin: 0 0 6px 0;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
       }
 
       .page-subtitle {
-        color: var(--muted);
+        color: var(--text-light);
         font-size: 14px;
         margin: 0;
       }
@@ -161,6 +157,12 @@
         .grid {
           grid-template-columns: 1fr 1fr;
         }
+        .grid > :first-child {
+          order: 1;
+        }
+        .grid > :last-child {
+          order: 2;
+        }
       }
 
       /* Card */
@@ -170,9 +172,16 @@
         border: 1px solid var(--card-border);
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         display: flex;
         flex-direction: column;
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        border-color: rgba(124, 58, 237, 0.2);
       }
 
       .card::before {
@@ -181,13 +190,18 @@
         inset: -2px;
         background: linear-gradient(
           135deg,
-          rgba(109, 40, 217, 0.5),
-          rgba(0, 183, 255, 0.5),
-          rgba(0, 255, 136, 0.45)
+          rgba(124, 58, 237, 0.1),
+          rgba(14, 165, 233, 0.1),
+          rgba(16, 185, 129, 0.1)
         );
         filter: blur(18px);
         z-index: -1;
-        opacity: 0.35;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .card:hover::before {
+        opacity: 0.5;
       }
 
       .card-header {
@@ -195,16 +209,18 @@
         align-items: center;
         justify-content: space-between;
         padding: 14px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         flex-shrink: 0;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(124, 58, 237, 0.02));
       }
 
       .card-title {
         font-weight: 700;
+        color: var(--text);
       }
 
       .card-sub {
-        color: var(--muted);
+        color: var(--text-light);
         font-size: 14px;
       }
 
@@ -223,6 +239,24 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
+        background: linear-gradient(to bottom, rgba(248, 249, 250, 0.5), rgba(240, 249, 255, 0.3));
+      }
+
+      .chat-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-messages::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: rgba(124, 58, 237, 0.3);
+        border-radius: 3px;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb:hover {
+        background: rgba(124, 58, 237, 0.5);
       }
 
       .message {
@@ -246,14 +280,15 @@
         color: #fff;
         font-size: 12px;
         font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .message.ai .message-avatar {
-        background: linear-gradient(90deg, #00b7ff, #00ff88);
+        background: linear-gradient(135deg, var(--secondary), var(--accent));
       }
 
       .message.user .message-avatar {
-        background: linear-gradient(90deg, #6d28d9, #00b7ff);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
       }
 
       .message-content {
@@ -261,19 +296,35 @@
         max-width: 80%;
         padding: 12px 16px;
         border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.06);
         font-size: 14px;
         line-height: 1.5;
+        transition: all 0.2s ease;
       }
 
       .message.ai .message-content {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 16px 16px 16px 4px;
+        background: linear-gradient(135deg, rgba(248, 249, 250, 0.8), rgba(240, 249, 255, 0.6));
+        border-radius: 16px 16px 4px 16px;
+        border-color: rgba(14, 165, 233, 0.2);
+        color: var(--text);
+      }
+
+      .message.ai .message-content:hover {
+        background: linear-gradient(135deg, rgba(240, 249, 255, 0.9), rgba(224, 242, 254, 0.7));
+        border-color: rgba(14, 165, 233, 0.4);
       }
 
       .message.user .message-content {
-        background: linear-gradient(90deg, #6d28d9, #00b7ff);
-        border-radius: 16px 16px 4px 16px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 16px 16px 16px 4px;
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+      }
+
+      .message.user .message-content:hover {
+        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        transform: translateY(-1px);
       }
 
       .loading {
@@ -286,8 +337,8 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #a1a1aa;
-        opacity: 0.5;
+        background: var(--primary);
+        opacity: 0.6;
         animation: bounce 1.4s infinite;
       }
 
@@ -304,17 +355,18 @@
         display: flex;
         gap: 12px;
         padding: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
         flex-shrink: 0;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(248, 249, 250, 0.3));
       }
 
       .chat-input {
         flex: 1;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.8);
+        border: 1.5px solid rgba(124, 58, 237, 0.2);
         border-radius: 8px;
         padding: 10px 14px;
-        color: #fff;
+        color: var(--text);
         font-size: 14px;
         outline: none;
         transition: all 0.2s ease;
@@ -322,12 +374,13 @@
       }
 
       .chat-input:focus {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: white;
+        border-color: rgba(124, 58, 237, 0.5);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
       }
 
       .chat-input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--text-light);
       }
 
       .send-btn {
@@ -339,17 +392,21 @@
         font-weight: 600;
         padding: 10px 14px;
         border-radius: 8px;
-        background: linear-gradient(90deg, var(--nova), var(--electric));
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 10px 30px rgba(0, 183, 255, 0.25);
-        transition: all 0.15s ease;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        transition: all 0.2s ease;
         font-size: 14px;
         font-family: inherit;
       }
 
       .send-btn:hover:not(:disabled) {
         transform: translateY(-2px);
-        filter: brightness(1.05);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+      }
+
+      .send-btn:active:not(:disabled) {
+        transform: translateY(0);
       }
 
       .send-btn:disabled {
@@ -362,10 +419,12 @@
         width: 100%;
         flex: 1;
         background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.06),
-          rgba(255, 255, 255, 0.02)
+          135deg,
+          rgba(240, 249, 255, 0.4),
+          rgba(248, 249, 250, 0.4)
         );
+        border-radius: 12px;
+        margin: 12px;
       }
 
       /* Animations */
@@ -384,7 +443,7 @@
         0%,
         80%,
         100% {
-          opacity: 0.5;
+          opacity: 0.6;
           transform: translateY(0);
         }
         40% {
@@ -396,9 +455,10 @@
       /* Footer */
       .footer {
         margin-top: 24px;
-        color: var(--muted);
+        color: var(--text-light);
         font-size: 12px;
         text-align: center;
+        font-weight: 500;
       }
     </style>
   </head>
@@ -422,7 +482,26 @@
       </section>
 
       <div class="grid">
-        <!-- Chat Section -->
+        <!-- Avatar Section (First child, will be on left) -->
+        <section class="card" aria-label="AI Avatar">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Live AI Avatar</div>
+              <div class="card-sub">Powered by D-ID</div>
+            </div>
+            <div class="badge" aria-hidden="true">Active</div>
+          </div>
+
+          <div class="card-body">
+            <div
+              id="did-agent-container"
+              role="region"
+              aria-label="D-ID Agent Container"
+            ></div>
+          </div>
+        </section>
+
+        <!-- Chat Section (Second child, will be on right) -->
         <section class="card" aria-label="Chat Interface">
           <div class="card-header">
             <div>
@@ -464,25 +543,6 @@
                 </svg>
               </button>
             </form>
-          </div>
-        </section>
-
-        <!-- Avatar Section -->
-        <section class="card" aria-label="AI Avatar">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Live AI Avatar</div>
-              <div class="card-sub">Powered by D-ID</div>
-            </div>
-            <div class="badge" aria-hidden="true">Active</div>
-          </div>
-
-          <div class="card-body">
-            <div
-              id="did-agent-container"
-              role="region"
-              aria-label="D-ID Agent Container"
-            ></div>
           </div>
         </section>
       </div>
