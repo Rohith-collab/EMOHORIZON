@@ -389,10 +389,16 @@
               <div class="card-title">Your Camera</div>
               <div class="card-sub">Camera preview</div>
             </div>
-            <div class="badge" aria-hidden="true" id="camera-status-badge">Connecting...</div>
+            <div class="badge" aria-hidden="true" id="camera-status-badge">
+              Connecting...
+            </div>
           </div>
           <div class="card-body">
-            <div id="user-camera-container" role="region" aria-label="User Camera Preview">
+            <div
+              id="user-camera-container"
+              role="region"
+              aria-label="User Camera Preview"
+            >
               <div class="camera-status" id="camera-status">
                 <p>Requesting camera access...</p>
               </div>
@@ -433,21 +439,23 @@
           .getUserMedia({
             video: {
               width: { ideal: 1280 },
-              height: { ideal: 720 }
+              height: { ideal: 720 },
             },
-            audio: false
+            audio: false,
           })
           .then((stream) => {
             video.srcObject = stream;
             statusDiv.classList.add("ready");
             statusBadge.textContent = "Ready";
-            statusBadge.style.background = "linear-gradient(90deg, rgba(0, 255, 136, 0.25), rgba(0, 183, 255, 0.25))";
+            statusBadge.style.background =
+              "linear-gradient(90deg, rgba(0, 255, 136, 0.25), rgba(0, 183, 255, 0.25))";
           })
           .catch((err) => {
             console.error("Camera error:", err);
             statusDiv.innerHTML = `<p>Camera access denied or unavailable</p><p style="font-size: 12px; margin-top: 8px; color: #a1a1aa;">${err.name}</p>`;
             statusBadge.textContent = "Error";
-            statusBadge.style.background = "linear-gradient(90deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25))";
+            statusBadge.style.background =
+              "linear-gradient(90deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25))";
           });
       })();
     </script>
