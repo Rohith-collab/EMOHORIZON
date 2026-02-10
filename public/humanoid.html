@@ -381,6 +381,25 @@
             ></div>
           </div>
         </section>
+
+        <!-- User Camera Preview -->
+        <section class="card" aria-label="Your Camera">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Your Camera</div>
+              <div class="card-sub">Camera preview</div>
+            </div>
+            <div class="badge" aria-hidden="true" id="camera-status-badge">Connecting...</div>
+          </div>
+          <div class="card-body">
+            <div id="user-camera-container" role="region" aria-label="User Camera Preview">
+              <div class="camera-status" id="camera-status">
+                <p>Requesting camera access...</p>
+              </div>
+              <video id="user-camera" autoplay playsinline muted></video>
+            </div>
+          </div>
+        </section>
       </div>
 
       <p class="footer">
