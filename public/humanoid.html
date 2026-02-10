@@ -134,7 +134,7 @@
 
       @media (min-width: 980px) {
         .grid {
-          grid-template-columns: 1.25fr 0.85fr;
+          grid-template-columns: 1fr;
           gap: 28px;
         }
       }
@@ -196,81 +196,6 @@
         );
       }
 
-      /* Info panel */
-      .panel {
-        display: grid;
-        gap: 16px;
-      }
-
-      .panel .tip {
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      /* Quick chat in tips */
-      .tip-chat {
-        display: grid;
-        gap: 10px;
-        padding: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.04);
-      }
-
-      .tip-chat .row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 8px;
-      }
-
-      .tip-chat input[type="text"] {
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: rgba(255, 255, 255, 0.06);
-        color: var(--text);
-      }
-
-      .tip-chat button {
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: linear-gradient(90deg, var(--nova), var(--electric));
-        color: #fff;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      .tip-chat .output {
-        color: #e5e7eb;
-        font-size: 14px;
-        white-space: pre-wrap;
-        min-height: 18px;
-      }
-
-      .cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: linear-gradient(90deg, var(--nova), var(--electric));
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 10px 30px rgba(0, 183, 255, 0.25);
-        transition:
-          transform 0.15s ease,
-          filter 0.15s ease;
-      }
-
-      .cta:hover {
-        transform: translateY(-2px);
-        filter: brightness(1.05);
-      }
-
       /* Footer note */
       .footer {
         margin-top: 24px;
@@ -302,14 +227,6 @@
         #did-agent-container {
           height: 420px;
         }
-
-        .tip-chat input[type="text"] {
-          padding: 10px;
-        }
-
-        .tip-chat button {
-          padding: 10px 12px;
-        }
       }
 
       @media (max-width: 600px) {
@@ -334,38 +251,6 @@
         #did-agent-container {
           height: 320px;
           min-height: 220px;
-        }
-
-        /* Stack the input and button for comfortable touch targets */
-        .tip-chat .row {
-          grid-template-columns: 1fr;
-        }
-
-        .tip-chat button {
-          width: 100%;
-          padding: 14px;
-          font-size: 16px;
-        }
-
-        .tip-chat input[type="text"] {
-          width: 100%;
-          padding: 12px;
-          font-size: 15px;
-        }
-
-        .tip-chat {
-          padding: 10px;
-        }
-
-        .cta {
-          width: 100%;
-          display: inline-flex;
-          justify-content: center;
-          padding: 12px 14px;
-        }
-
-        .panel .tip {
-          font-size: 14px;
         }
 
         .card {
@@ -441,66 +326,10 @@
             ></div>
           </div>
         </section>
-
-        <!-- Info / Controls -->
-        <aside class="card" aria-label="Session Information">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Session Tips</div>
-              <div class="card-sub">Best experience guidelines</div>
-            </div>
-          </div>
-          <div class="card-body" style="padding: 16px">
-            <div class="panel">
-              <p class="tip">
-                • Use a clear microphone and speak naturally. The tutor responds
-                with realistic voice and expressions.
-              </p>
-              <p class="tip">
-                • For topic changes, say for example: “Let’s practice interview
-                questions” or “Explain phrasal verbs.”
-              </p>
-              <p class="tip">
-                • You can mute/unmute or end the session anytime using the
-                controls inside the agent.
-              </p>
-
-              <div class="tip-chat" aria-label="Quick question to tutor">
-                <div class="card-sub">Ask the tutor</div>
-                <form id="tip-chat-form" class="row" autocomplete="off">
-                  <input
-                    id="tip-chat-input"
-                    type="text"
-                    placeholder="Ask anything..."
-                    aria-label="Your question"
-                    required
-                  />
-                  <button
-                    id="tip-chat-send"
-                    type="submit"
-                    aria-label="Send message"
-                  >
-                    Ask
-                  </button>
-                </form>
-                <div
-                  id="tip-chat-output"
-                  class="output"
-                  role="status"
-                  aria-live="polite"
-                ></div>
-              </div>
-
-              <a class="cta" href="/humanoid.html" aria-label="Restart Session"
-                >↻ Restart Session</a
-              >
-            </div>
-          </div>
-        </aside>
       </div>
 
       <p class="footer">
-        If video doesn’t load, refresh the page or check your network.
+        If video doesn't load, refresh the page or check your network.
       </p>
     </main>
 
@@ -515,47 +344,5 @@
       data-monitor="true"
       data-target-id="did-agent-container"
     ></script>
-    <script>
-      (function () {
-        const form = document.getElementById("tip-chat-form");
-        const input = document.getElementById("tip-chat-input");
-        const output = document.getElementById("tip-chat-output");
-        const button = document.getElementById("tip-chat-send");
-        if (!form || !input || !output || !button) return;
-
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const text = input.value.trim();
-          if (!text) return;
-          button.disabled = true;
-          const prev = button.textContent;
-          button.textContent = "Sending...";
-          output.textContent = "";
-          try {
-            const res = await fetch("/api/chat", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ message: text }),
-            });
-            const data = await res.json();
-            if (!res.ok)
-              throw new Error(
-                data && data.error ? data.error : "Request failed",
-              );
-            output.textContent =
-              data && data.message ? String(data.message) : "";
-          } catch (err) {
-            const msg =
-              err && err.message ? err.message : "Something went wrong";
-            output.textContent = "Error: " + msg;
-          } finally {
-            button.disabled = false;
-            button.textContent = prev || "Ask";
-            input.value = "";
-            input.focus();
-          }
-        });
-      })();
-    </script>
   </body>
 </html>
