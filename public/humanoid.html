@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Humanoid AI Tutor</title>
+    <title>Humanoid AI Tutor - Advanced Intelligence</title>
     <style>
       :root {
         --bg1: #0a0a1a;
@@ -15,448 +15,327 @@
         --card-border: rgba(255, 255, 255, 0.16);
         --text: #ffffff;
         --muted: #a1a1aa;
+        --interview: #f59e0b;
+        --chat: #00b7ff;
+        --comm: #00ff88;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
       body {
-        height: 100%;
-      }
-
-      body {
-        margin: 0;
         color: var(--text);
-        font-family:
-          Inter,
-          system-ui,
-          -apple-system,
-          Segoe UI,
-          Roboto,
-          Arial,
-          sans-serif;
-        background:
-          radial-gradient(
-            80rem 50rem at 10% 10%,
-            rgba(109, 40, 217, 0.15),
-            transparent 60%
-          ),
-          radial-gradient(
-            60rem 40rem at 90% 20%,
-            rgba(0, 183, 255, 0.12),
-            transparent 55%
-          ),
-          radial-gradient(
-            70rem 50rem at 50% 100%,
-            rgba(0, 255, 136, 0.12),
-            transparent 60%
-          ),
-          linear-gradient(180deg, var(--bg1), var(--bg2));
-        overflow-x: hidden;
+        font-family: Inter, system-ui, sans-serif;
+        background: radial-gradient(80rem 50rem at 10% 10%, rgba(109, 40, 217, 0.15), transparent 60%),
+                    linear-gradient(180deg, var(--bg1), var(--bg2));
+        overflow: hidden;
       }
 
-      /* Header */
       header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: linear-gradient(
-          180deg,
-          rgba(0, 0, 0, 0.35),
-          rgba(0, 0, 0, 0)
-        );
-        backdrop-filter: blur(6px);
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--card-border);
       }
+      .nav { max-width: 1400px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+      .back-link { color: #e5e7eb; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.15); padding: 8px 12px; border-radius: 8px; font-size: 14px; }
 
-      .nav {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      .mode-selector { display: flex; gap: 8px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 10px; border: 1px solid var(--card-border); }
+      .mode-btn {
+        padding: 6px 16px; border-radius: 8px; border: none; background: transparent; color: var(--muted);
+        cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s;
       }
+      .mode-btn.active { color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+      .mode-btn[data-mode="interview"].active { background: var(--interview); }
+      .mode-btn[data-mode="chat"].active { background: var(--chat); }
+      .mode-btn[data-mode="comm"].active { background: var(--comm); }
 
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: #e5e7eb;
-        text-decoration: none;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 8px 12px;
-        border-radius: 8px;
-        transition:
-          background 0.2s ease,
-          border-color 0.2s ease;
-      }
+      .container { max-width: 1400px; margin: 0 auto; padding: 20px; height: calc(100vh - 70px); }
+      .grid { display: grid; grid-template-columns: 1fr; gap: 24px; height: 100%; }
+      @media (min-width: 1024px) { .grid { grid-template-columns: 1fr 380px; } }
 
-      .back-link:hover {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(255, 255, 255, 0.25);
-      }
-
-      .title {
-        font-weight: 800;
-        letter-spacing: 0.02em;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(
-          90deg,
-          rgba(109, 40, 217, 0.25),
-          rgba(0, 183, 255, 0.25)
-        );
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        font-size: 12px;
-        color: #e5e7eb;
-      }
-
-      /* Layout */
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 24px 20px 40px;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      @media (min-width: 980px) {
-        .grid {
-          grid-template-columns: 1fr 1fr;
-          gap: 28px;
-        }
-      }
-
-      /* User Camera Preview */
-      #user-camera-container {
-        width: 100%;
-        height: 520px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.06),
-          rgba(255, 255, 255, 0.02)
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-      }
-
-      #user-camera {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .camera-status {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        color: var(--muted);
-        z-index: 10;
-      }
-
-      .camera-status.ready {
-        display: none;
-      }
-
-      @media (max-width: 980px) {
-        #user-camera-container {
-          height: 420px;
-        }
-      }
-
-      @media (max-width: 600px) {
-        #user-camera-container {
-          height: 320px;
-          min-height: 220px;
-        }
-      }
-
-      @media (max-width: 420px) {
-        #user-camera-container {
-          height: 260px;
-        }
-      }
-
-      /* Card */
       .card {
-        position: relative;
-        background: var(--card);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        background: var(--card); border: 1px solid var(--card-border);
+        border-radius: 24px; overflow: hidden; position: relative;
+        display: flex; flex-direction: column;
       }
+      .card-header { padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; }
+      .card-title { font-weight: 700; font-size: 17px; }
+      .card-sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
 
-      .card::before {
-        content: "";
-        position: absolute;
-        inset: -2px;
-        background: linear-gradient(
-          135deg,
-          rgba(109, 40, 217, 0.5),
-          rgba(0, 183, 255, 0.5),
-          rgba(0, 255, 136, 0.45)
-        );
-        filter: blur(18px);
-        z-index: -1;
-        opacity: 0.35;
+      #did-agent-container { width: 100%; flex: 1; background: #000; }
+      
+      .sidebar { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 4px; }
+      .sidebar::-webkit-scrollbar { width: 4px; }
+      .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+      /* Emotion Analysis Card */
+      .emotion-card { padding: 0; }
+      .emotion-content { padding: 16px 20px; }
+      .emotion-grid { 
+        display: grid; grid-template-columns: 1fr; gap: 14px; 
+        max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.3s;
       }
+      .emotion-grid.visible { max-height: 400px; margin-top: 20px; }
+      
+      .emo-bar-row { display: flex; flex-direction: column; gap: 6px; }
+      .emo-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+      .emo-progress-bg { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+      .emo-progress-fill { height: 100%; width: 0%; transition: width 0.4s ease-out; }
 
-      .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      /* Metrics Toggle Button */
+      .metrics-toggle {
+        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+        width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.2s; color: var(--muted);
       }
+      .metrics-toggle:hover { background: rgba(255,255,255,0.15); color: #fff; }
+      .metrics-toggle.active { background: var(--nova); color: #fff; border-color: var(--nova); }
 
-      .card-title {
-        font-weight: 700;
+      /* Mode instruction card */
+      .instruction-card {
+        background: linear-gradient(135deg, rgba(109, 40, 217, 0.12), rgba(0, 183, 255, 0.12));
+        padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
       }
+      .instruction-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--electric); display: flex; align-items: center; gap: 8px; }
+      .instruction-text { font-size: 13px; line-height: 1.6; color: #d1d5db; }
 
-      .card-sub {
-        color: var(--muted);
-        font-size: 14px;
+      #user-camera { width: 100%; height: 220px; object-fit: cover; border-radius: 16px; background: #000; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+      
+      .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; display: inline-block; margin-right: 6px; }
+      .status-dot.active { background: var(--cyber); box-shadow: 0 0 10px var(--cyber); }
+
+      .loader-overlay {
+        position: absolute; inset: 0; background: var(--bg1); z-index: 100;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease;
       }
-
-      .card-body {
-        padding: 0;
-      }
-
-      /* D-ID Agent */
-      #did-agent-container {
-        width: 100%;
-        height: 520px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.06),
-          rgba(255, 255, 255, 0.02)
-        );
-      }
-
-      /* Footer note */
-      .footer {
-        margin-top: 24px;
-        color: var(--muted);
-        font-size: 12px;
-        text-align: center;
-      }
-      @media (max-width: 980px) {
-        .container {
-          padding: 18px 16px 32px;
-        }
-
-        .nav {
-          padding: 10px 12px;
-        }
-
-        .card-header {
-          padding: 12px 14px;
-        }
-
-        .card-title {
-          font-size: 16px;
-        }
-
-        .card-sub {
-          font-size: 13px;
-        }
-
-        #did-agent-container {
-          height: 420px;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .container {
-          padding: 14px 12px 28px;
-        }
-
-        .nav {
-          gap: 8px;
-        }
-
-        h1.title {
-          font-size: 20px !important;
-        }
-
-        .grid {
-          grid-template-columns: 1fr;
-          gap: 16px;
-        }
-
-        /* Make the agent smaller and allow it to flex on small devices */
-        #did-agent-container {
-          height: 320px;
-          min-height: 220px;
-        }
-
-        .card {
-          border-radius: 12px;
-        }
-      }
-
-      @media (max-width: 420px) {
-        #did-agent-container {
-          height: 260px;
-        }
-
-        .badge {
-          font-size: 11px;
-          padding: 5px 8px;
-        }
-
-        .back-link {
-          padding: 6px 8px;
-        }
-
-        .title {
-          font-size: 18px;
-        }
-
-        .footer {
-          font-size: 12px;
-        }
-      }
+      .spinner { width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.05); border-top-color: var(--electric); border-radius: 50%; animation: spin 1s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
     </style>
-  </head>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js"></script>
+  </head>
   <body>
+    <div id="page-loader" class="loader-overlay">
+      <div class="spinner"></div>
+      <p id="loader-text" style="margin-top: 24px; font-weight: 600; font-size: 14px; letter-spacing: 2px; color: var(--muted);">CONNECTING NEURAL ENGINE...</p>
+    </div>
+
     <header>
-      <nav class="nav" aria-label="Top Navigation">
-        <a href="/" class="back-link" aria-label="Go to home">← Home</a>
-        <div>
-          <span class="badge" aria-label="Mode">Humanoid AI Tutor</span>
+      <nav class="nav">
+        <a href="/" class="back-link">← Exit</a>
+        
+        <div class="mode-selector">
+          <button class="mode-btn active" data-mode="chat">Chat Mode</button>
+          <button class="mode-btn" data-mode="interview">Interview</button>
+          <button class="mode-btn" data-mode="comm">Communication</button>
         </div>
-        <div style="width: 80px"></div>
+
+        <div style="font-size: 11px; color: var(--muted); font-weight: 600; display: flex; align-items: center; letter-spacing: 0.5px;">
+          <span class="status-dot active"></span> SYSTEM ACTIVE
+        </div>
       </nav>
     </header>
 
     <main class="container">
-      <section aria-labelledby="page-title" style="margin-bottom: 12px">
-        <h1
-          id="page-title"
-          class="title"
-          style="font-size: 28px; margin: 0 0 6px 0"
-        >
-          Humanoid AI Tutor
-        </h1>
-        <p class="card-sub">
-          Photorealistic AI tutor with natural conversation and emotions
-        </p>
-      </section>
-
       <div class="grid">
-        <!-- Avatar / Agent -->
-        <section class="card" aria-label="AI Humanoid Agent">
+        <section class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">Live AI Avatar</div>
-              <div class="card-sub">Powered by D-ID Web Agent</div>
+              <div class="card-title" id="main-title">Casual Conversation</div>
+              <div class="card-sub" id="main-sub">Speak naturally with the AI Tutor</div>
             </div>
-            <div class="badge" aria-hidden="true">Active</div>
+            <div id="ai-status-tag" style="padding: 6px 14px; border-radius: 20px; font-size: 10px; background: rgba(0, 183, 255, 0.15); color: #00b7ff; font-weight: 800; letter-spacing: 0.5px;">CHAT ACTIVE</div>
           </div>
-          <div class="card-body">
-            <div
-              id="did-agent-container"
-              role="region"
-              aria-label="D-ID Agent Container"
-            ></div>
-          </div>
+          <div id="did-agent-container" role="region"></div>
         </section>
 
-        <!-- User Camera Preview -->
-        <section class="card" aria-label="Your Camera">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Your Camera</div>
-              <div class="card-sub">Camera preview</div>
+
+        <aside class="sidebar">
+          <div class="instruction-card">
+            <div class="instruction-title" id="inst-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Mode Objectives
             </div>
-            <div class="badge" aria-hidden="true" id="camera-status-badge">
-              Connecting...
-            </div>
+            <p class="instruction-text" id="inst-text">
+              Practice free-flowing dialogue. The AI analyzes your expressions to provide an empathetic response.
+            </p>
           </div>
-          <div class="card-body">
-            <div
-              id="user-camera-container"
-              role="region"
-              aria-label="User Camera Preview"
-            >
-              <div class="camera-status" id="camera-status">
-                <p>Requesting camera access...</p>
+
+
+          <section class="card emotion-card">
+            <div class="card-header">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="font-weight: 700; font-size: 15px;">Biometric Analysis</div>
               </div>
-              <video id="user-camera" autoplay playsinline muted></video>
+              <button class="metrics-toggle" id="toggle-metrics" title="Toggle detailed metrics">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              </button>
             </div>
-          </div>
-        </section>
-      </div>
+            
+            <div class="emotion-content">
+              <video id="user-camera" autoplay playsinline muted></video>
+              
+              <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <div class="card-sub" style="margin: 0; font-weight: 600; color: #fff;" id="top-emotion-display">Waiting for face...</div>
+                  <div class="card-sub" style="font-size: 11px;">Neural Confidence Level</div>
+                </div>
+                <div id="confidence-pct" style="font-family: monospace; font-weight: 800; color: var(--cyber);">0%</div>
+              </div>
 
-      <p class="footer">
-        If video doesn't load, refresh the page or check your network.
-      </p>
+
+              <div class="emotion-grid" id="emotion-bars">
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
     </main>
 
-    <!-- D-ID Web Agent Integration (Full Mode) -->
-    <script
-      type="module"
-      src="https://agent.d-id.com/v2/index.js"
-      data-mode="full"
-      data-client-key="Z29vZ2xlLW9hdXRoMnwxMDA5Mjc3MjEyNTg1MTc4MTQzNjA6bDJUYUdmT3loYVl5WlBkMUxuZElk"
-      data-agent-id="v2_agt_aoxqaBin"
-      data-name="did-agent"
-      data-monitor="true"
-      data-target-id="did-agent-container"
-    ></script>
+    <script type="module" src="https://agent.d-id.com/v2/index.js" data-mode="full" data-client-key="Z29vZ2xlLW9hdXRoMnwxMDA5Mjc3MjEyNTg1MTc4MTQzNjA6bDJUYUdmT3loYVl5WlBkMUxuZElk" data-agent-id="v2_agt_aoxqaBin" data-name="did-agent" data-monitor="true" data-target-id="did-agent-container"></script>
 
-    <!-- User Camera Script -->
     <script>
-      (function () {
-        const video = document.getElementById("user-camera");
-        const statusDiv = document.getElementById("camera-status");
-        const statusBadge = document.getElementById("camera-status-badge");
+      const EMOTIONS = ['neutral', 'happy', 'sad', 'angry', 'fearful', 'disgusted', 'surprised'];
+      const COLORS = { neutral: '#94a3b8', happy: '#00ff88', sad: '#3b82f6', angry: '#ef4444', fearful: '#a855f7', disgusted: '#84cc16', surprised: '#f59e0b' };
+      
+      const SMOOTHING_FACTOR = 0.2;
+      let smoothedExpressions = { neutral: 0, happy: 0, sad: 0, angry: 0, fearful: 0, disgusted: 0, surprised: 0 };
 
-        if (!video) return;
+      const MODE_DATA = {
+        chat: { title: "Casual Conversation", sub: "Speak naturally with the AI Tutor", tag: "CHAT ACTIVE", tagColor: "rgba(0, 183, 255, 0.15)", tagTextColor: "#00b7ff", inst: "Practice free-flowing dialogue. The AI analyzes your expressions to provide an empathetic response." },
+        interview: { title: "Professional Interview", sub: "Simulation of a high-stakes job interview", tag: "INTERVIEW MODE", tagColor: "rgba(245, 158, 11, 0.15)", tagTextColor: "#f59e0b", inst: "Focus on composure and clarity. The system monitors micro-expressions to gauge your stress levels and confidence." },
+        comm: { title: "Communication Training", sub: "Practice public speaking and empathy", tag: "TRAINING ACTIVE", tagColor: "rgba(0, 255, 136, 0.15)", tagTextColor: "#00ff88", inst: "The goal is emotional resonance. Ensure your facial expressions align with the tone and intensity of your delivery." }
+      };
 
-        // Request camera access
-        navigator.mediaDevices
-          .getUserMedia({
-            video: {
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-            },
-            audio: false,
-          })
-          .then((stream) => {
-            video.srcObject = stream;
-            statusDiv.classList.add("ready");
-            statusBadge.textContent = "Ready";
-            statusBadge.style.background =
-              "linear-gradient(90deg, rgba(0, 255, 136, 0.25), rgba(0, 183, 255, 0.25))";
-          })
-          .catch((err) => {
-            console.error("Camera error:", err);
-            statusDiv.innerHTML = `<p>Camera access denied or unavailable</p><p style="font-size: 12px; margin-top: 8px; color: #a1a1aa;">${err.name}</p>`;
-            statusBadge.textContent = "Error";
-            statusBadge.style.background =
-              "linear-gradient(90deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25))";
+      (async function main() {
+        const video = document.getElementById('user-camera');
+        const barsContainer = document.getElementById('emotion-bars');
+        const topEmoDisplay = document.getElementById('top-emotion-display');
+        const confidencePct = document.getElementById('confidence-pct');
+        const loader = document.getElementById('page-loader');
+        const loaderText = document.getElementById('loader-text');
+        const metricsToggle = document.getElementById('toggle-metrics');
+        const emotionGrid = document.getElementById('emotion-bars');
+
+        // Toggle Metrics
+        metricsToggle.addEventListener('click', () => {
+          metricsToggle.classList.toggle('active');
+          emotionGrid.classList.toggle('visible');
+        });
+
+        // Setup UI Bars
+        EMOTIONS.forEach(emo => {
+          const row = document.createElement('div');
+          row.className = 'emo-bar-row';
+          row.innerHTML = `
+            <div class="emo-info"><span>${emo}</span><span id="val-${emo}">0%</span></div>
+            <div class="emo-progress-bg"><div id="bar-${emo}" class="emo-progress-fill" style="background: ${COLORS[emo]}"></div></div>
+          `;
+          barsContainer.appendChild(row);
+        });
+
+        // Mode Switching
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateMode(btn.dataset.mode);
           });
+        });
+
+        function updateMode(mode) {
+          const data = MODE_DATA[mode];
+          document.getElementById('main-title').textContent = data.title;
+          document.getElementById('main-sub').textContent = data.sub;
+          const tag = document.getElementById('ai-status-tag');
+          tag.textContent = data.tag;
+          tag.style.background = data.tagColor;
+          tag.style.color = data.tagTextColor;
+          document.getElementById('inst-text').textContent = data.inst;
+        }
+
+        const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+        
+        async function initAI() {
+          try {
+            loaderText.textContent = "LOADING FACE DETECTOR...";
+            await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+            loaderText.textContent = "LOADING EMOTION ENGINE...";
+            await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
+            startCamera();
+          } catch (err) { 
+            console.error("Model load failed:", err);
+            loaderText.textContent = "AI INITIALIZATION FAILED. RELOADING...";
+            setTimeout(() => location.reload(), 3000);
+          }
+        }
+
+        // Wait for faceapi script to load
+        const checkApi = setInterval(() => { 
+          if (typeof faceapi !== 'undefined' && faceapi.nets) { 
+            clearInterval(checkApi); 
+            initAI(); 
+          } 
+        }, 100);
+
+        function startCamera() {
+          loaderText.textContent = "REQUESTING CAMERA ACCESS...";
+          navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
+            .then(stream => {
+              video.srcObject = stream;
+              // Ensure video is playing before starting detection
+              video.onloadedmetadata = () => {
+                video.play();
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+                detect();
+              };
+            })
+            .catch(err => { 
+              loader.innerHTML = "<div style='color: #ef4444; text-align: center; padding: 20px;'><h2 style='margin:0'>Camera Blocked</h2><p>Please enable camera access and refresh</p></div>"; 
+            });
+        }
+
+        async function detect() {
+          if (video.paused || video.ended) {
+            requestAnimationFrame(detect);
+            return;
+          }
+          
+          try {
+            // Lowered minConfidence to 0.4 for more forgiving detection
+            const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4, maxResults: 1 });
+            const result = await faceapi.detectSingleFace(video, options).withFaceExpressions();
+            
+            if (result && result.expressions) {
+              const exps = result.expressions;
+              let maxVal = 0;
+              let topEmo = 'neutral';
+
+              EMOTIONS.forEach(emo => {
+                smoothedExpressions[emo] = (smoothedExpressions[emo] * (1 - SMOOTHING_FACTOR)) + ((exps[emo] || 0) * SMOOTHING_FACTOR);
+                const perc = Math.round(smoothedExpressions[emo] * 100);
+                document.getElementById(`bar-${emo}`).style.width = perc + '%';
+                document.getElementById(`val-${emo}`).textContent = perc + '%';
+                if (smoothedExpressions[emo] > maxVal) { maxVal = smoothedExpressions[emo]; topEmo = emo; }
+              });
+
+              topEmoDisplay.textContent = topEmo.toUpperCase();
+              topEmoDisplay.style.color = COLORS[topEmo];
+              confidencePct.textContent = Math.round(maxVal * 100) + '%';
+              confidencePct.style.color = COLORS[topEmo];
+            } else {
+              // Reset display if no face found
+              topEmoDisplay.textContent = "FACE NOT DETECTED";
+              topEmoDisplay.style.color = "rgba(255,255,255,0.3)";
+              confidencePct.textContent = "0%";
+            }
+          } catch (e) {
+            console.error("Detection error:", e);
+          }
+          
+          // Use setTimeout to prevent blocking the main thread too heavily
+          setTimeout(() => requestAnimationFrame(detect), 60);
+        }
       })();
     </script>
   </body>
